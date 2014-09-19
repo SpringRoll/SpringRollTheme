@@ -25,10 +25,10 @@
 
     {{#if module}}
         {{#if submodule}}
-            Namespace: {{#crossLinkModule submodule}}{{/crossLinkModule}}<br>
-            Parent Namespace: {{#crossLinkModule module}}{{/crossLinkModule}}
+            Module: {{#crossLinkModule submodule}}{{/crossLinkModule}}<br>
+            Parent Module: {{#crossLinkModule module}}{{/crossLinkModule}}
         {{else}}
-            Namespace: {{#crossLinkModule module}}{{/crossLinkModule}}
+            Module: {{#crossLinkModule module}}{{/crossLinkModule}}
         {{/if}}
     {{/if}}
 
