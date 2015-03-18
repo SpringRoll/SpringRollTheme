@@ -1,25 +1,31 @@
-<div id="api-list">
-    <h2 class="off-left">APIs</h2>
-    <div id="api-tabview" class="tabview">
-        <div id="api-tabview-filter">
-            <input type="search" id="api-filter" placeholder="Type to filter APIs">
-        </div>
-		<ul class="tabs">
-            <li><a href="#api-classes">Classes</a></li>
-			<li><a href="#api-modules">Modules</a></li>
-        </ul>
-        <div id="api-tabview-panel">
-            <ul id="api-classes" class="apis classes">
-            {{#classes}}
-                <li><a href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a></li>
-            {{/classes}}
-            </ul>
-
-            <ul id="api-modules" class="apis modules">
-            {{#allModules}}
-                <li><a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a></li>
-            {{/allModules}}
-            </ul>
-        </div>
-    </div>
+<h2>APIs</h2>
+<p>
+	<div class="input-group">
+		<div class="input-group-addon">
+			<span class="glyphicon glyphicon-search"></span>
+		</div>
+		<input type="search" class="form-control" id="api-filter" placeholder="Type to filter APIs">
+	</div>
+</p>
+<p>
+	<ul class="nav nav-tabs">
+		<li class="active"><a data-toggle="tab" href="#api-classes">Classes</a></li>
+		<li><a data-toggle="tab" href="#api-modules">Modules</a></li>
+	</ul>
+</p>
+<div class="tab-content">
+	<ul id="api-classes" class="tab-pane active list-group">
+	{{#classes}}
+		<li class="list-group-item">
+			<a class="btn-block" href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a>
+		</li>
+	{{/classes}}
+	</ul>
+	<ul id="api-modules" class="tab-pane list-group"">
+	{{#allModules}}
+		<li class="list-group-item">
+			<a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a>
+		</li>
+	{{/allModules}}
+	</ul>
 </div>
