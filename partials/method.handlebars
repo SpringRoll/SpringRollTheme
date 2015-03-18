@@ -1,23 +1,22 @@
 <div id="method_{{name}}" class="method item{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if extended_from}} inherited{{/if}}">
-    <h3 class="name inline"><code>{{name}}</code></h3>
+    <h3 class="name"><code>{{name}}</code></h3>
 
     {{#if params}}
-        <div >
-            <span>(</span>
-            <ul>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
             {{#params}}
-                <li >
+                <li class="arg">
                     {{#if optional}}
-                        <code>[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+                        <code class="optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
                     {{else}}
                         <code>{{name}}</code>
                     {{/if}}
                 </li>
             {{/params}}
-            </ul><span>)</span>
+            </ul><span class="paren">)</span>
         </div>
     {{else}}
-        <span>()</span>
+        <span class="paren">()</span>
     {{/if}}
 
     {{#if return}}
