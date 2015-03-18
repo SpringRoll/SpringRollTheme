@@ -1,3 +1,53 @@
 body {
-	font-family:"Titillium Web", "Helvetica", sans-serif;
+	font-family: "Titillium Web", "Helvetica", sans-serif;
+}
+
+ul {
+	list-style: none;
+}
+/*
+.index-section {
+	padding: 0.5em 1em 0.5em 0.5em;
+
+}*/
+
+#classdocs {
+	/*background: #eee;*/
+}
+/*.index-section ul {
+    -moz-column-count: 3;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 20px;
+    column-count: 3;
+    column-gap: 20px;
+}*/
+
+.index-section .flag {
+	color: #888;
+	font-size: 0.7em;
+}
+
+.inline {
+	display: inline;
+}
+
+input[type=checkbox] {
+	display: none;
+}
+
+input[type=checkbox] + label {
+	background: #999;
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+	padding: 0 0 0 0px;
+}
+
+input[type=checkbox]:checked + label {
+	background: #0080FF;
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+	padding: 0 0 0 0px;
 }

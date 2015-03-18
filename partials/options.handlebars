@@ -1,19 +1,21 @@
 <div class="text-right">
-	Show:
-	<label for="api-show-inherited">
-		<input type="checkbox" id="api-show-inherited" checked>
-		Inherited
-	</label>
-	<label for="api-show-protected">
-		<input type="checkbox" id="api-show-protected">
-		Protected
-	</label>
-	<label for="api-show-private">
-		<input type="checkbox" id="api-show-private">
-		Private
-	</label>
-	<label for="api-show-deprecated">
-		<input type="checkbox" id="api-show-deprecated">
-		Deprecated
-	</label>
+  Show:
+  {{!-- <label for="api-show-inherited">
+    <input type="checkbox" id="api-show-inherited" checked> Inherited
+  </label>
+  <label for="api-show-protected">
+    <input type="checkbox" id="api-show-protected"> Protected
+  </label>
+  <label for="api-show-private">
+    <input type="checkbox" id="api-show-private"> Private
+  </label>
+  <label for="api-show-deprecated">
+    <input type="checkbox" id="api-show-deprecated"> Deprecated
+  </label> --}}
+<div class="btn-group" data-toggle="buttons" role="group" aria-label="...">
+  <button type="button" class="btn btn-default" id="api-show-inherited" >Inherited</button>
+  <button type="button" class="btn btn-default" id="api-show-protected">Protected</button>
+  <button type="button" class="btn btn-default" id="api-show-private">Private</button>
+  <button type="button" class="btn btn-default" id="api-show-deprecated">Deprecated</button>
+</div>
 </div>
