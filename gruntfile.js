@@ -1,8 +1,16 @@
 module.exports = function(grunt)
 {
-	require('jit-grunt')(grunt);
+    require('jit-grunt')(grunt);
     grunt.initConfig(
     {
+        concat:
+        {
+            js:
+            {
+                src: ['src/js/**/*.js'],
+                dest: 'assets/js/main.js',
+            },
+        },
         less:
         {
             development:
@@ -15,18 +23,28 @@ module.exports = function(grunt)
                 },
                 files:
                 {
-					// destination file and source file
-                    "assets/css/main.css": "src/less/*.less" 
+                    // destination file and source file
+                    "assets/css/main.css": "src/less/*.less"
                 }
             }
         },
         watch:
         {
-            styles:
+            css:
             {
-				// which files to watch
-                files: ["src/less/*.less"], 
+                // which files to watch
+                files: ["src/less/*.less"],
                 tasks: ['less'],
+                options:
+                {
+                    nospawn: true
+                }
+            },
+            js:
+            {
+                // which files to watch
+                files: ["src/js/**/*.js"],
+                tasks: ['concat'],
                 options:
                 {
                     nospawn: true
@@ -35,6 +53,6 @@ module.exports = function(grunt)
         }
     });
 
-    grunt.registerTask('default', ['less']);
-	grunt.registerTask('dev', ['watch']);
+    grunt.registerTask('default', ['less', 'concat']);
+    grunt.registerTask('dev', ['watch']);
 };
