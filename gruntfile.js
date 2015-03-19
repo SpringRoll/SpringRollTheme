@@ -3,6 +3,10 @@ module.exports = function(grunt)
     require('jit-grunt')(grunt);
     grunt.initConfig(
     {
+        jshint:
+        {
+            all: ['src/js/**/*.js']
+        },
         concat:
         {
             js:
@@ -44,7 +48,7 @@ module.exports = function(grunt)
             {
                 // which files to watch
                 files: ["src/js/**/*.js"],
-                tasks: ['concat'],
+                tasks: ['jshint', 'concat'],
                 options:
                 {
                     nospawn: true
@@ -53,6 +57,6 @@ module.exports = function(grunt)
         }
     });
 
-    grunt.registerTask('default', ['less', 'concat']);
+    grunt.registerTask('default', ['less', 'jshint', 'concat']);
     grunt.registerTask('dev', ['watch']);
 };

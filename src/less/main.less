@@ -4,34 +4,48 @@
 @font-size-xl: 130%;
 @font-size-xxl: 150%;
 
-//blues light to dark
-@blue-1: rgba(215,245,250,1);
-@blue-2: rgba(161,225,234,1);
-@blue-0: rgba(114,200,212,1);
-@blue-3: rgba( 75,171,184,1);
-@blue-4: rgba( 44,140,153,1);
+/* colors pulled from the springroll logo
 
-// yellows light to dark
-@yellow-1: rgba(255,244,219,1);
-@yellow-2: rgba(255,230,174,1);
-@yellow-0: rgba(255,217,135,1);
-@yellow-3: rgba(255,206,101,1);
-@yellow-4: rgba(250,193, 69,1);
+dark reverse side
+   #12344f  #135 
+   darkslategray 
+   hsl(206,62,19) 
+   rgb(18,52,79) 
 
-//reds light to dark
-@red-1: rgba(255,222,219,1);
-@red-2: rgba(255,180,174,1);
-@red-0: rgba(255,144,135,1);
-@red-3: rgba(255,112,101,1);
-@red-4: rgba(250, 82, 69,1);
+aqua at edge 
+   #26fdfa  #2ff 
+   aqua 
+   hsl(179,98,57) 
+   rgb(38,253,250)
 
-@color-background: @yellow-1;
+center mid
+   #03b5e6  #0be 
+   deepskyblue 
+   hsl(192,97,45) 
+   rgb(3,181,230)
+
+center blue
+   #0c7ac1  #18c 
+   darkcyan 
+   hsl(203,88,40) 
+   rgb(12,122,193)
+*/
+
+//lightest to darkest
+@springroll-light: #eefeff;
+@springroll-aqua: rgb(38,253,250);
+@springroll-blue: rgb(3,181,230);
+@springroll-black: rgb(18,52,79);
+@springroll-dark: rgb(12,122,193);
+
+@color-background: #efefef;
 @color-panel: white;
-@color-link: @blue-0;
+@color-link: @springroll-blue;
+@color-line: @springroll-blue;
+@code-background: @springroll-light;
 
 html {
    background: @color-background;
-   color: #111;
    overflow-y: scroll;
 }
 ul {
@@ -56,11 +70,18 @@ h1 {
 
 }
 #classdocs .tab-content {
-   background: #fff;
-   padding: 1em;
-
+   // background: #fff;
+   // padding: 1em;
 }
-/* -- Links ----------------------------------------------------------------- */
+.tab-content {
+   background: #fff;
+   margin: 0;
+   padding: 0;
+   // border: 1px solid @color-line;
+   // border-top: none;
+   box-shadow: 0px 5px 3px darken(@background, 10%);
+}
+/* -- Links ------- */
 a {
    color: @color-link;
    text-decoration: none;
@@ -85,7 +106,7 @@ a {
    left: 40%;
 
 }
-/* -- Paragraphs ------------------------------------------------------------ */
+/* -- Paragraphs -- */
 
 p {
    margin: 1.3em 0;
@@ -99,7 +120,7 @@ td p:first-child {
    margin-top: 0;
 
 }
-/* -- Headings -------------------------------------------------------------- */
+/* -- Headings ---- */
 
 h1,
 h2,
@@ -107,30 +128,24 @@ h3,
 h4,
 h5,
 h6 {
-   color: #111 !important;
-   // font-family: 'Titillium Web', sans-serif;
+   color: @springroll-blue !important;
    font-weight: 300;
    line-height: 1.1;
-   margin: 1.1em 0 0.5em;
+   margin: 0 !important;
 }
 h1 {
    font-size: 184.6%;
-   margin: 0;
 }
 h2 {
    font-size: @font-size-xxl;
-   margin: 0 !important;
-   padding: 1.5em 0 0.5em;
 }
 h3 {
    font-size: @font-size-xl;
-   padding: 1.5em 0 0.5em;
 }
 h4 {
    border-bottom: 1px solid #dbdfea;
    font-size: @font-size-large;
    font-weight: normal;
-   padding: 1em 0 0;
 }
 h5,
 h6 {
@@ -141,7 +156,7 @@ h6 {
 
 code {
    color: #222;
-   background: @blue-1;
+   background: @code-background;
 }
 code,
 kbd,
@@ -230,7 +245,7 @@ dt {
    font-weight: bold;
 
 }
-/* -- Tables ---------------------------------------------------------------- */
+/* -- Tables ------ */
 
 caption,
 th {
@@ -302,7 +317,7 @@ th {
    font-weight: normal;
 
 }
-/* -- Other Styles ---------------------------------------------------------- */
+/* -- Other Styles  */
 .button {
    border: 1px solid #dadada;
    -moz-border-radius: 3px;
@@ -345,19 +360,19 @@ th {
    // Old browsers
    background: #fff;
    // FF3.6+
-   background: -moz-linear-gradient(top, #ffffff 0%, #e2e6e9 100%);
+   background: -moz-linear-gradient(top, #fff 0%, #e2e6e9 100%);
    // Chrome,Safari4+
-   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #e2e6e9));
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #e2e6e9));
    // Chrome10+,Safari5.1+
-   background: -webkit-linear-gradient(top, #ffffff 0%, #e2e6e9 100%);
+   background: -webkit-linear-gradient(top, #fff 0%, #e2e6e9 100%);
    // Opera 11.10+
-   background: -o-linear-gradient(top, #ffffff 0%, #e2e6e9 100%);
+   background: -o-linear-gradient(top, #fff 0%, #e2e6e9 100%);
    // IE10+
-   background: -ms-linear-gradient(top, #ffffff 0%, #e2e6e9 100%);
+   background: -ms-linear-gradient(top, #fff 0%, #e2e6e9 100%);
    // W3C
-   background: linear-gradient(to bottom, #ffffff 0%, #e2e6e9 100%);
+   background: linear-gradient(to bottom, #fff 0%, #e2e6e9 100%);
    // IE6-9 
-   // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e2e6e9', GradientType=0);
+   // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#e2e6e9', GradientType=0);
 }
 #hd img {
    margin: 15px 20px 15px 0;
@@ -379,11 +394,10 @@ th {
    text-align: right;
    margin-top: 33px;
    font-style: normal !important;
-   // font-family: 'Titillium Web', sans-serif;
 }
 #classdocs {
    .item {
-      border-bottom: 1px solid @color-link;
+      border-bottom: 1px solid @color-line;
       margin: 0 !important;
       padding: 2em;
       border-top: none;
@@ -451,13 +465,14 @@ ul li p {
    font-weight: normal;
 
 }
-/* -- API Docs CSS ---------------------------------------------------------- */
+/* -- API Docs CSS  */
 /*
 This file is organized so that more generic styles are nearer the top, and more
 specific styles are nearer the bottom of the file. This allows us to take full
 advantage of the cascade to avoid redundant style rules. Please respect this
 convention when making changes.
 */
+
 /* -- Generic TabView styles ------------------------------------------------ */
 /*
 These styles apply to all API doc tabviews. To change styles only for a
@@ -467,7 +482,6 @@ specific tabview, see the other sections below.
 .yui3-js-enabled .apidocs .tabview {
    visibility: hidden;
    /* Hide until the TabView finishes rendering. */
-
    _visibility: visible;
 }
 .apidocs .tabview.yui3-tabview-content {
@@ -807,7 +821,7 @@ kbd .cmd {
    background: inherit;
 
 }
-/* -- Submodule List -------------------------------------------------------- */
+/* -- Submodule List  */
 
 .apidocs .module-submodule-description {
    font-size: @font-size-small;
@@ -841,7 +855,7 @@ kbd .cmd {
    list-style: decimal;
 
 }
-/* -- API options ----------------------------------------------------------- */
+/* -- API options - */
 
 #api-options {
    font-size: 11px;
@@ -851,7 +865,7 @@ kbd .cmd {
 
 }
 /*#api-options label { margin-right: 0.6em; }*/
-/* -- API list -------------------------------------------------------------- */
+/* -- API list ---- */
 
 #api-list {
    margin-top: -2em;
@@ -902,21 +916,32 @@ kbd .cmd {
    font-weght: bold;
 
 }
-
 .nav-tabs>li {
-  margin-bottom: -2px;
-}
+   margin-bottom: -2px;
 
+}
 // bootstrap overrides 
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:focus,
 .nav-tabs>li.active>a:hover {
    color: #111;
    background-color: @color-panel;
-   border: 2px solid @color-link;
+   border: 2px solid @color-line;
    border-bottom-color: transparent;
-}
 
+}
 .nav-tabs {
-  border-bottom: 2px solid @color-link;
+   border-bottom: 2px solid @color-line;
+}
+.list-group-item {
+   margin: 0;
+   background: inherit;
+   border: none;
+   border-bottom: 1px solid #eee;
+   &:hover {
+      background: @color-line;
+      a {
+         color: #fff;
+      }
+   }
 }

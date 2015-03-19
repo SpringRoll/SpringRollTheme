@@ -6,11 +6,11 @@
   <input type="search" class="form-control" id="api-filter" placeholder="Type to filter APIs">
 </div>
 <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#api-classes">Classes</a></li>
-  <li><a data-toggle="tab" href="#api-modules">Modules</a></li>
+  <li id='tab-classes'><a data-toggle="tab" href="#api-classes">Classes</a></li>
+  <li id='tab-modules'><a data-toggle="tab" href="#api-modules">Modules</a></li>
 </ul>
 <div class="tab-content">
-  <ul id="api-classes" class="tab-pane active list-group">
+  <ul id="api-classes" class="tab-pane list-group">
     {{#classes}}
       <li class="list-group-item">
         <a class="btn-block" href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a>
