@@ -1,26 +1,26 @@
 <h2>APIs</h2>
-<div class="input-group">
-  <div class="input-group-addon">
-    <span class="glyphicon glyphicon-search"></span>
+<div class='input-group'>
+  <div class='input-group-addon'>
+    <span class='glyphicon glyphicon-search'></span>
   </div>
-  <input type="search" class="form-control" id="api-filter" placeholder="Type to filter APIs">
+  <input type='search' class='form-control' id='api-filter' placeholder='Type to filter APIs'>
 </div>
-<ul class="nav nav-tabs">
-  <li id='tab-classes'><a data-toggle="tab" href="#api-classes">Classes</a></li>
-  <li id='tab-modules'><a data-toggle="tab" href="#api-modules">Modules</a></li>
+<ul class='nav nav-tabs'>
+  <li id='tab-classes' class='sidebar-toggle'><a data-toggle='tab' href='#api-classes'>Classes</a></li>
+  <li id='tab-modules' class='sidebar-toggle'><a data-toggle='tab' href='#api-modules'>Modules</a></li>
 </ul>
-<div class="tab-content">
-  <ul id="api-classes" class="tab-pane list-group">
+<div class='tab-content'>
+  <ul id='api-classes' class='tab-pane list-group'>
     {{#classes}}
-      <li class="list-group-item">
-        <a class="btn-block" href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a>
+      <li class='list-group-item'>
+        <a class='btn-block' href='{{../projectRoot}}classes/{{name}}.html'>{{displayName}}</a>
       </li>
     {{/classes}}
   </ul>
-  <ul id="api-modules" class="tab-pane list-group">
+  <ul id='api-modules' class='tab-pane list-group'>
     {{#allModules}}
-      <li class="list-group-item">
-        <a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a>
+      <li class='list-group-item'>
+        <a href='{{../projectRoot}}modules/{{name}}.html'>{{displayName}}</a>
       </li>
     {{/allModules}}
   </ul>
