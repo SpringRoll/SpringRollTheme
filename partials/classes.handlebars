@@ -65,40 +65,33 @@
 
 <div id="classdocs" class="tabview">
   <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#docs-index">Index</a></li>
+    <li id="tab-index">
+      <a data-toggle="tab" class="docs-toggle" href="#docs-index">Index</a>
+    </li>
     {{#if methods}}
-      <li><a data-toggle="tab" href="#docs-methods">Methods</a></li>
+      <li id="tab-methods">
+        <a data-toggle="tab" class="docs-toggle" href="#docs-methods">Methods</a>
+      </li>
     {{/if}}
     {{#if properties}}
-      <li><a data-toggle="tab" href="#docs-properties">Properties</a></li>
+      <li id="tab-properties">
+        <a data-toggle="tab" class="docs-toggle" href="#docs-properties">Properties</a>
+      </li>
     {{/if}}
     {{#if attrs}}
-      <li><a data-toggle="tab" href="#docs-attributes">Attributes</a></li>
+      <li id="tab-attributes">
+        <a data-toggle="tab" class="docs-toggle" href="#docs-attributes">Attributes</a>
+      </li>
     {{/if}}
     {{#if events}}
-      <li><a data-toggle="tab" href="#docs-events">Events</a></li>
+      <li id="tab-events">
+        <a data-toggle="tab" class="docs-toggle" href="#docs-events">Events</a>
+      </li>
     {{/if}}
   </ul>
-  {{!--
-  <ul class="nav nav-tabs">
-    <li class="switch-group switchTo__index api-class-tab active"><a href="#">Index</a></li>
-    <li><a data-toggle="tab" href="#api-index">Index</a></li>
-    <li class="switch-group switchTo__methods"><a href="#">Methods</a></li>
-    {{/if}}
-    {{#if properties}}
-      <li class="switch-group switchTo__properties"><a href="#">Properties</a></li>
-    {{/if}}
-    {{#if attrs}}
-      <li class="switch-group switchTo__attributes"><a href="#">Attributes</a></li>
-    {{/if}}
-    {{#if events}}
-      <li class="switch-group switchTo__events"><a href="#">Events</a></li>
-    {{/if}}
-  </ul>
-  --}}
 
   <div class="tab-content">
-    <div role="tabpanel" id="docs-index" class="tab-pane active">
+    <div role="tabpanel" id="docs-index" class="tab-pane">
       {{!--
       <h2 class="off-left">Item Index</h2> --}}
 
