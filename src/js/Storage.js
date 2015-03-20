@@ -4,13 +4,14 @@
  */
 function retrieve(val)
 {
-    //console.log('checkStorage', val);
+    // console.log('retrieving', val);
     var stored = localStorage[val];
-    //console.log('stored', stored);
+    // console.log('\tstored', stored);
     if (stored)
+    {
         return JSON.parse(stored);
-    else
-        return undefined;
+    }
+    return undefined;
 }
 
 /**

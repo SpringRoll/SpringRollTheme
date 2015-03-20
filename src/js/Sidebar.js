@@ -27,5 +27,6 @@ $('.sidebar-toggle').click(onSidebarToggle);
  */
 var setActiveView = function(view)
 {
-    $('#tab-' + view + ', ' + '#api-' + view).addClass('active');
-}(retrieve('sidebar') || defaultView);
+    $('#tab-' + view).addClass('active');
+    $('#api-' + view).addClass('active');
+}(localStorage.sidebar || defaultView);

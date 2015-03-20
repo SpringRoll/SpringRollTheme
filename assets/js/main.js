@@ -85,21 +85,23 @@ $('.sidebar-toggle').click(onSidebarToggle);
  */
 var setActiveView = function(view)
 {
-    $('#tab-' + view + ', ' + '#api-' + view).addClass('active');
-}(retrieve('sidebar') || defaultView);
+    $('#tab-' + view).addClass('active');
+    $('#api-' + view).addClass('active');
+}(localStorage.sidebar || defaultView);
 /**
  * Retrieval of data from localStorage that handles from-String conversions.
  * @param {String} val Value to retrieve from localStorage
  */
 function retrieve(val)
 {
-    //console.log('checkStorage', val);
+    // console.log('retrieving', val);
     var stored = localStorage[val];
-    //console.log('stored', stored);
+    // console.log('\tstored', stored);
     if (stored)
+    {
         return JSON.parse(stored);
-    else
-        return undefined;
+    }
+    return undefined;
 }
 
 /**
