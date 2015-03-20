@@ -527,7 +527,7 @@ h6 {
    indicate private and protected items, item return types, etc. in an
    attractive and unobtrusive way. */
 .apidocs .flag {
-   background: #c2c7cd;
+   background: lighten(@color-flag-default, 20%);
    border-radius: 3px;
    color: #fff;
    font-size: @font-size-small;
@@ -536,7 +536,7 @@ h6 {
    position: relative;
    top: -2px;
 
-}
+} 
 /* Class/module metadata such as "Uses", "Extends", "Defined in", etc. */
 
 .apidocs .meta {
@@ -959,7 +959,7 @@ kbd .cmd {
 .toggle-button-override(@color) {
    .btn-primary {
       background-color: @color;
-      border-color: darken(@color, 10%);
+      // border-color: darken(@color, 10%);
       &.active,
       &.focus,
       &:active,
@@ -967,7 +967,7 @@ kbd .cmd {
       &:hover,
       .open>.dropdown-toggle.btn-primary {
          background-color: @color;
-         border-color: darken(@color, 10%);
+         // border-color: darken(@color, 10%);
       }
    }
 }

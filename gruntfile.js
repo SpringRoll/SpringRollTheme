@@ -44,20 +44,17 @@ module.exports = function(grunt)
                 // which files to watch
                 files: ["src/js/**/*.js"],
                 tasks: ['jshint', 'concat'],
-                options:
-                {
-                    nospawn: true
-                }
+            },
+            concat:
+            {
+                files: ["src/less/**/*.less"],
+                tasks: ['concat'],
             },
             less:
             {
                 // which files to watch
                 files: ["temp/less/concat.less"],
                 tasks: ['less'],
-                options:
-                {
-                    nospawn: true
-                }
             },
         }
     });
