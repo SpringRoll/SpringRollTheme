@@ -1,3 +1,56 @@
+/* -----------------------------------
+   Color code the docs, 
+   and hide the now-redudant flags
+ ----------------------------------- */
+
+@colorIndex: true;
+@colorDocs: true;
+
+& when (@colorIndex = true) {
+   #docs-index {
+      .private a {
+         color: @color-flag-private;
+      }
+      .protected a {
+         color: @color-flag-protected;
+      }
+      .deprecated a {
+         text-decoration: line-through;
+      }
+   }
+
+}
+& when (@colorDocs = true) {
+   #classdocs {
+      h3 code {
+         color: @color-flag-default;
+      }
+      .inherited h3 code {
+         font-weight: normal;
+      }
+      .private h3 code {
+         color: @color-flag-private;
+      }
+      .protected h3 code {
+         color: @color-flag-protected;
+      }
+      .deprecated h3 code {
+         text-decoration: line-through;
+      }
+
+   }
+   .apidocs {
+      .flag.private {
+         display: none;
+      }
+      .flag.protected {
+         display: none;
+      }
+      .flag.deprecated {
+         display: none;
+      }
+   }
+}
 // colors pulled from the springroll logo
 @springroll-light: #eefeff;
 @springroll-aqua: #26fdfa;
@@ -24,72 +77,39 @@
 @color-secondary-2-2: #ff2e0e;
 @color-secondary-2-3: #ff2300;
 @color-secondary-2-4: #c61b00;
-@font-size-small: 92%;
-@font-size-base: 1em;
-@font-size-large: 115%;
-@font-size-xl: 130%;
-@font-size-xxl: 150%;
 
+
+
+// 
 @color-background: #efefef;
 @color-panel: white;
 @color-link: @springroll-blue;
 @color-line: @springroll-blue;
 @code-background: none;
 
+// colors from the 
 // scope flag colors
 @color-flag-default: @springroll-blue;
 @color-flag-inherited: lighten(@springroll-blue, 30%);
 @color-flag-private: @color-secondary-2-2;
 @color-flag-protected: @color-secondary-1-3;
-@color-flag-deprecated: desaturate(@color-secondary-2-2, 60%);
+@color-flag-deprecated: @springroll-black;
 
-@colorIndex: true;
-@colorDocs: true;
+@font-size-small: 92%;
+@font-size-base: 1em;
+@font-size-large: 115%;
+@font-size-xl: 130%;
+@font-size-xxl: 150%;
 
-& when (@colorIndex = true) {
-   #docs-index {
-      .private a {
-         color: @color-flag-private;
-      }
-      .protected a {
-         color: @color-flag-protected;
-      }
-      .deprecated a {
-         text-decoration: line-through;
-      }
-   }
+@sticky-height-collapsed: 38px;
+@sticky-height-expanded: 108px;
 
-}
-& when (@colorDocs = true) {
-   #classdocs {
-      .private h3 code {
-         color: @color-flag-private;
-      }
-      .protected h3 code {
-         color: @color-flag-protected;
-      }
-      .deprecated h3 code {
-         text-decoration: line-through;
-      }
 
-   }
-   .apidocs {
-      .flag.private {
-         display: none;
-      }
-      .flag.protected {
-         display: none;
-      }
-      .flag.deprecated {
-         display: none;
-      }
-   }
-
-}
 .constructor {
    code {
       background: lighten(@color-background, 4%);
    }
+
 }
 html {
    background: @color-background;
@@ -104,8 +124,7 @@ ul {
 body {
    font-family: "Titillium Web", "Helvetica", sans-serif;
    background: @color-background;
-   margin: 0.5em 0 0;
-   padding: 0;
+   padding-top: @sticky-height-expanded;
 }
 .list-group-item {
    word-wrap: break-word;
@@ -116,17 +135,11 @@ h1 {
    }
 
 }
-#classdocs .tab-content {
-   // background: #fff;
-   // padding: 1em;
-}
 .tab-content {
    background: #fff;
    margin: 0;
    padding: 0;
-   // border: 1px solid @color-line;
-   // border-top: none;
-   box-shadow: 0 5px 3px darken(@color-background, 10%);
+   box-shadow: 0 3px 8px darken(@color-background, 10%);
 
 }
 /* -- Links ------- */
@@ -136,8 +149,10 @@ a {
    .hidden {
       display: none;
    }
-   &:hover {
+   &:hover,
+   &:focus {
       text-decoration: underline;
+      color: @springroll-dark;
    }
 
 }
@@ -169,7 +184,6 @@ td p:first-child {
 
 }
 /* -- Headings ---- */
-
 h1,
 h2,
 h3,
@@ -340,8 +354,11 @@ th {
 .content {
    padding: 0 20px 0 25px;
 }
-.sidebar {
-   padding: 0 2em;
+#sidebar {
+   .nav {
+      margin: 2em 0 0;
+   }
+
 }
 #bd {
    padding: 7px 0 30px;
@@ -373,7 +390,6 @@ th {
    border-radius: 3px;
    color: #444;
    display: inline-block;
-   // font-family: Helvetica, Arial, sans-serif;
    font-size: @font-size-small;
    font-weight: bold;
    padding: 4px 13px 3px;
@@ -436,16 +452,62 @@ th {
 }
 #hd a:hover {
    text-decoration: none;
+
 }
-.header .version em {
-   display: block;
-   text-align: right;
-   margin-top: 33px;
-   font-style: normal !important;
+header {
+   transition: all 0.4s ease;
+   position: fixed;
+   height: @sticky-height-expanded;
+   width: 100%;
+   background: @color-background;
+   box-shadow: 0 0 20px transparent;
+   top: 0;
+   z-index: 9999;
+   height: 108px;
+   .toggle.btn-xs {
+      margin-left: 0.2em;
+   }
+   .logo {
+      a:hover,
+      a:focus {
+         text-decoration: none;
+      }
+
+   }
+   .version em {
+      display: block;
+      text-align: right;
+      margin-top: 33px;
+      font-style: normal !important;
+
+   }
+   &.sticky {
+      background: fadeout(white, 5%);
+      box-shadow: 0 0 20px darken(@color-background, 10%);
+      height: @sticky-height-collapsed;
+      .scope-toggles {
+         margin-top: 0.4em;
+      }
+      h1 {
+         font-size: @font-size-xl;
+         padding: 0.5em;
+      }
+      .logo {
+         float: left;
+         img {
+            height: @sticky-height-collapsed * 0.8;
+            margin-top: -0.4em;
+         }
+
+      }
+      .version {
+         display: none;
+      }
+   }
+
 }
 #classdocs {
    .item {
-      border-bottom: 1px solid @color-line;
       margin: 0 !important;
       padding: 2em;
       border-top: none;
@@ -890,9 +952,7 @@ kbd .cmd {
    padding: 0 0 1em;
 
 }
-//* -- Content TabView ------------ */
 /* -- Source File Contents ------- */
-
 .prettyprint li.L0,
 .prettyprint li.L1,
 .prettyprint li.L2,
@@ -905,7 +965,6 @@ kbd .cmd {
 
 }
 /* -- API options - */
-
 #api-options {
    font-size: 11px;
    margin-top: 0.5em;
@@ -913,15 +972,10 @@ kbd .cmd {
    right: 2em;
 
 }
-/*#api-options label { margin-right: 0.6em; }*/
 /* -- API list ---- */
-
 #api-list {
    margin-top: -2em;
    *zoom: 1;
-}
-#api-modules {
-   /*border-bottom: 1px solid #c3c3c3;*/
 }
 .apis {
    font-size: 12px;
@@ -975,12 +1029,12 @@ kbd .cmd {
 .nav-tabs>li.active>a:hover {
    color: #111;
    background-color: @color-panel;
-   border: 2px solid @color-line;
+   // border: 2px solid @color-line;
    border-bottom-color: transparent;
 
 }
 .nav-tabs {
-   border-bottom: 2px solid @color-line;
+   // border-bottom: 2px solid @color-line;
 }
 .list-group-item {
    margin: 0;
@@ -1003,8 +1057,18 @@ kbd .cmd {
    border-radius: 4px 4px 0 0;
 
 }
-// BootstrapToggle button override -------------------
-
+// hide the left-border on the first tab of a tab pane
+.nav-tabs li.active:first-of-type {
+   a,
+   a:focus,
+   a:active {
+      border-left-color: transparent;
+   }
+}
+/* -----------------------------------
+    BootstrapToggle button override 
+ ----------------------------------- */
+ 
 // mixin to affect colors when checkbox is active
 .toggle-button-override(@color) {
    .btn-primary {

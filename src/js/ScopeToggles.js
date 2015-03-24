@@ -7,7 +7,6 @@ function toggleScope()
     var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
     var val = retrieve(localStorage['show_' + which]);
     localStorage['show_' + which] = !val;
-    //console.log('localStorage.show_' + which + ' set to: ' + localStorage['show_' + which]);
     tabContent.toggleClass('show-' + which);
 }
 

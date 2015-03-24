@@ -1,3 +1,38 @@
+var USE_SCROLL = true;
+$('.index-item').click(function(e)
+{
+	console.log("click");
+	//deactive the current index panel
+	setActiveTab('#docs-', 'index', false);
+	hash = $(this).children('a')[0].hash;
+	var underscore = hash.indexOf('_');
+	var tab = hash.slice(1, underscore);
+
+	// YuiDocs gives each list-item li id a singular id name (method, property, event)
+	// when we actually need a plural to match the naming of tab panel ids (methods, properties)
+	if (tab === 'property') tab = 'properties';
+	else tab += 's';
+	var item = hash.slice(underscore + 1);
+
+	// set which tab
+	setActiveTab('#docs-', tab);
+
+	// note: we don't have to manage the deep link to the item because
+	// the href to an id takes care of itself, but here's a scrolling
+    // version if you're feeling slick 
+	if (USE_SCROLL)
+	{
+		e.preventDefault();
+		var scrollTop = $(hash).offset().top - $('header').height();
+		var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
+		scrollLength = Math.min(Math.max(parseInt(scrollLength), 300), 1000);
+		console.log(scrollLength);
+		$("html, body").delay(50).animate(
+		{
+			scrollTop: scrollTop
+		}, scrollLength);
+	}
+});
 /* ---- ScopeToggle.js ------ */
 var tabContent = $('#classdocs .tab-content');
 
@@ -7,7 +42,6 @@ function toggleScope()
     var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
     var val = retrieve(localStorage['show_' + which]);
     localStorage['show_' + which] = !val;
-    //console.log('localStorage.show_' + which + ' set to: ' + localStorage['show_' + which]);
     tabContent.toggleClass('show-' + which);
 }
 
@@ -56,66 +90,76 @@ var searchBar = $("#api-filter").keyup(function(e)
         });
     }
 });
-/* ----------------------- 
-        Sidebar.js       
------------------------- */
-var defaultSidebar = 'classes';
-var defaultDoc = 'index';
+var $header = $('header');
 
-/**
- * Respond to sidebar tab clicks.
- */
-function onSidebarToggle()
+$(window).scroll(function()
 {
-    // visibility is handle through css, so unlike the 
-    // scope-toggle, we only need to capture the event and 
-    // store the data for page refresh
-    var id = this.id || this[0].id;
-    var view = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
-    localStorage.activeSidebar = view;
-}
-
-//store click events visibility
-$('.sidebar-toggle').click(onSidebarToggle);
-
-/**
- * Init tab-pane and nav-li elements on page to have a .active 
- * based on localStorage, or to default view if localStorage is null.
- * @param {String} view Which sidebar view to init
- */
-var setActiveSidebar = function(view)
-{
-    $('#tab-' + view).addClass('active');
-    $('#api-' + view).addClass('active');
-}(localStorage.activeSidebar || defaultSidebar);
-
-var setActiveDocs = function(view)
-{
-    console.log('setActiveDocs', view);
-    $('#tab-' + view).addClass('active');
-    $('#docs-' + view).addClass('active');
-}(localStorage.activeDocs || defaultDoc);
+    if ($(this).scrollTop() > 1)
+    {
+        // animations are handled by css
+        $header.addClass("sticky");
+    }
+    else
+    {
+        $header.removeClass("sticky");
+    }
+});
 /**
  * Retrieval of data from localStorage that handles from-String conversions.
  * @param {String} val Value to retrieve from localStorage
  */
 function retrieve(val)
 {
-    // console.log('retrieving', val);
     var stored = localStorage[val];
-    // console.log('\tstored', stored);
     if (stored)
     {
         return JSON.parse(stored);
     }
     return undefined;
 }
+/**
+ *  Respond to sidebar tab clicks. Store the most recently 
+ *  clicked/viewed tab. 
+ *  @param {jQuery} event
+ */
+function onTabToggle(event)
+{
+    // visibility is handle through css, so unlike the 
+    // scope-toggle, we only need to capture the event and 
+    // store the data for page refresh
+    var id = this.id || this[0].id;
+    var view = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
+    localStorage[event.data.storageVar] = view;
+}
+
+//store click events visibility
+$('.sidebar-toggle').click(
+{
+    storageVar: "activeSidebar"
+}, onTabToggle);
+$('.docs-toggle').click(
+{
+    storageVar: "activeDocs"
+}, onTabToggle);
 
 /**
- * Retrieval of data from localStorage that handles to-String conversions.
- * @param {String} val Value to store in localStorage
+ *  Init tab-pane and nav-li elements on page to have a .active 
+ *  based on localStorage, or to default view if localStorage is null.
+ *  @param {String} view Which sidebar view to init
  */
-function store(val)
+var setActiveTab = function(paneId, view, activate)
 {
-    //
-}
+    if (activate === false)
+    {
+        $('#tab-' + view).removeClass('active');
+        $(paneId + view).removeClass('active');
+    }
+    else
+    {
+        $('#tab-' + view).addClass('active');
+        $(paneId + view).addClass('active');
+    }
+};
+
+setActiveTab('#api-', localStorage.activeSidebar || 'classes');
+setActiveTab('#docs-', localStorage.activeDocs || 'index');
