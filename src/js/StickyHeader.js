@@ -1,14 +1,24 @@
-var $header = $('header');
-
-$(window).scroll(function()
+/**
+ *
+ */
+(function()
 {
-    if ($(this).scrollTop() > 1)
+    var StickyHeader = function()
     {
-        // animations are handled by css
-        $header.addClass("sticky");
-    }
-    else
-    {
-        $header.removeClass("sticky");
-    }
-});
+        var header = $('header');
+        $(window).scroll(function()
+        {
+            if ($(this).scrollTop() > 1)
+            {
+                // animations are handled by css
+                header.addClass("sticky");
+            }
+            else
+            {
+                header.removeClass("sticky");
+            }
+        });
+    };
+
+    SpringRollTheme.StickyHeader = StickyHeader;
+}());

@@ -3,9 +3,6 @@
    and hide the now-redudant flags
  ----------------------------------- */
 
-@colorIndex: true;
-@colorDocs: true;
-
 & when (@colorIndex = true) {
    #docs-index {
       .private a {
@@ -37,17 +34,21 @@
       .deprecated h3 code {
          text-decoration: line-through;
       }
-
    }
-   .apidocs {
-      .flag.private {
-         display: none;
-      }
-      .flag.protected {
-         display: none;
-      }
-      .flag.deprecated {
-         display: none;
+
+}
+& when (@showFlags = false) {
+   #classdocs {
+      .apidocs {
+         .flag.private {
+            display: none;
+         }
+         .flag.protected {
+            display: none;
+         }
+         .flag.deprecated {
+            display: none;
+         }
       }
    }
 }

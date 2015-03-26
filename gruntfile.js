@@ -11,12 +11,12 @@ module.exports = function(grunt)
         {
             less:
             {
-                src: ['src/less/**/*.less'],
+                src: ['src/less/**/*.less',],
                 dest: 'temp/less/concat.less',
             },
             js:
             {
-                src: ['src/js/**/*.js'],
+                src: ['src/js/**/*.js', 'src/main.js'],
                 dest: 'assets/js/main.js',
             },
         },
@@ -33,7 +33,7 @@ module.exports = function(grunt)
                 files:
                 {
                     // destination file and source file
-                    "assets/css/main.css": ["temp/less/concat.less"]
+                    'assets/css/main.css': ['temp/less/concat.less']
                 }
             }
         },
@@ -42,18 +42,18 @@ module.exports = function(grunt)
             js:
             {
                 // which files to watch
-                files: ["src/js/**/*.js"],
+                files: ['src/**/*.js'],
                 tasks: ['jshint', 'concat'],
             },
             concat:
             {
-                files: ["src/less/**/*.less"],
+                files: ['src/less/**/*.less'],
                 tasks: ['concat'],
             },
             less:
             {
                 // which files to watch
-                files: ["temp/less/concat.less"],
+                files: ['temp/less/concat.less'],
                 tasks: ['less'],
             },
         }

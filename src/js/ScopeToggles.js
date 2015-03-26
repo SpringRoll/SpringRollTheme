@@ -1,32 +1,48 @@
-/* ---- ScopeToggle.js ------ */
-var tabContent = $('#classdocs .tab-content');
-
-function toggleScope()
+/**
+ *
+ */
+(function()
 {
-    var id = this.id || this[0].id;
-    var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
-    var val = retrieve(localStorage['show_' + which]);
-    localStorage['show_' + which] = !val;
-    tabContent.toggleClass('show-' + which);
-}
+    var Storage = null;
+    var _tabContent = $('#classdocs .tab-content');
 
-//toggle visibility
-$('.scope-toggle').change(toggleScope);
+    var ScopeToggles = {};
+    
+    var p = ScopeToggles.prototype = {};
 
-function defaultOn()
-{
-    this.prop('checked', true);
-    var id = this.id || this[0].id;
-    var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
-    localStorage['show_' + which] = true;
-    tabContent.toggleClass('show-' + which);
-}
+    p.init = function()
+    {
+        Storage = SpringRollTheme.Storage;
+        //toggle visibility
+        $('.scope-toggle').change(this.toggle);
 
-if (retrieve('show_inherited') !== false)
-    defaultOn.call($('#toggle-inherited'));
-if (retrieve('show_protected'))
-    defaultOn.call($('#toggle-protected'));
-if (retrieve('show_private'))
-    defaultOn.call($('#toggle-private'));
-if (retrieve('show_deprecated'))
-    defaultOn.call($('#toggle-deprecated'));
+        if (Storage.retrieve('show_inherited') !== false)
+            this.defaultOn.call($('#toggle-inherited'));
+        if (Storage.retrieve('show_protected'))
+            this.defaultOn.call($('#toggle-protected'));
+        if (Storage.retrieve('show_private'))
+            this.defaultOn.call($('#toggle-private'));
+        if (Storage.retrieve('show_deprecated'))
+            this.defaultOn.call($('#toggle-deprecated'));
+    };
+
+    p.toggle = function()
+    {
+        var id = this.id || this[0].id;
+        var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
+        var val = Storage.retrieve('show_' + which);
+        localStorage['show_' + which] = !val;
+        _tabContent.toggleClass('show-' + which);
+    };
+
+    p.defaultOn = function()
+    {
+        this.prop('checked', true);
+        var id = this.id || this[0].id;
+        var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
+        localStorage['show_' + which] = true;
+        _tabContent.toggleClass('show-' + which);
+    };
+
+    SpringRollTheme.ScopeToggles = ScopeToggles.prototype;
+}());

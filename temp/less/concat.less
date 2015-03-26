@@ -3,9 +3,6 @@
    and hide the now-redudant flags
  ----------------------------------- */
 
-@colorIndex: true;
-@colorDocs: true;
-
 & when (@colorIndex = true) {
    #docs-index {
       .private a {
@@ -37,17 +34,21 @@
       .deprecated h3 code {
          text-decoration: line-through;
       }
-
    }
-   .apidocs {
-      .flag.private {
-         display: none;
-      }
-      .flag.protected {
-         display: none;
-      }
-      .flag.deprecated {
-         display: none;
+
+}
+& when (@showFlags = false) {
+   #classdocs {
+      .apidocs {
+         .flag.private {
+            display: none;
+         }
+         .flag.protected {
+            display: none;
+         }
+         .flag.deprecated {
+            display: none;
+         }
       }
    }
 }
@@ -95,6 +96,14 @@
 @color-flag-protected: @color-secondary-1-3;
 @color-flag-deprecated: @springroll-black;
 
+/*
+ *  DESIGN BOOLEANS
+ */
+@showOptionalFlags: false;
+@colorIndex: true;
+@colorDocs: true;
+@showFlags: true;
+
 @font-size-small: 92%;
 @font-size-base: 1em;
 @font-size-large: 115%;
@@ -103,7 +112,6 @@
 
 @sticky-height-collapsed: 38px;
 @sticky-height-expanded: 108px;
-
 
 .constructor {
    code {
@@ -156,8 +164,8 @@ a {
    }
 
 }
-/* "Jump to Table of Contents" link is shown to assistive tools, but hidden from
-   sight until it's focused. */
+/* "Jump to Table of Contents" link is shown to assistive tools, 
+   but hidden from sight until it's focused. */
 
 .jump {
    position: absolute;
@@ -479,9 +487,9 @@ header {
       text-align: right;
       margin-top: 33px;
       font-style: normal !important;
-
    }
    &.sticky {
+      padding: 0;
       background: fadeout(white, 5%);
       box-shadow: 0 0 20px darken(@color-background, 10%);
       height: @sticky-height-collapsed;
@@ -545,16 +553,7 @@ abbr {
    border-bottom: 1px dashed #ccc;
    font-size: 80%;
    cursor: help;
-}
-.prettyprint li.L0,
-.prettyprint li.L1,
-.prettyprint li.L2,
-.prettyprint li.L3,
-.prettyprint li.L5,
-.prettyprint li.L6,
-.prettyprint li.L7,
-.prettyprint li.L8 {
-   list-style: decimal;
+
 }
 ul li p {
    margin-top: 0;
@@ -638,15 +637,25 @@ h6 {
 /* A flag is a compact, capsule-like indicator of some kind. It's used to
    indicate private and protected items, item return types, etc. in an
    attractive and unobtrusive way. */
-.apidocs .flag {
+.item .flag {
    background: fadeOut(@color-flag-default, 50%);
    border-radius: 3px;
    color: #fff;
    font-size: @font-size-small;
-   margin: 0 0.5em;
-   padding: 4px 6px;
+   padding: 2px 4px;
    position: relative;
-   top: -2px;
+   &.optional {
+      & when (@showOptionalFlags = false) {
+         display: none;
+      }
+   }
+
+}
+.flags {
+   display: inline;
+   span:first-of-type {
+      margin-left: 1em;
+   }
 
 }
 /* Class/module metadata such as "Uses", "Extends", "Defined in", etc. */
@@ -911,25 +920,35 @@ kbd .cmd {
 }
 /* -- File Source View ------------------------------------------------------ */
 
-.apidocs .file pre.code,
-#doc .apidocs .file pre.prettyprint {
-   background: inherit;
+pre.code.prettyprint.prettyprinted {
+   background: white;
    border: none;
    overflow: visible;
-   padding: 0;
-   tab-size: 3;
-}
-.apidocs .L0,
-.apidocs .L1,
-.apidocs .L2,
-.apidocs .L3,
-.apidocs .L4,
-.apidocs .L5,
-.apidocs .L6,
-.apidocs .L7,
-.apidocs .L8,
-.apidocs .L9 {
-   background: inherit;
+   tab-size: 4;
+   li {
+      list-style: decimal;
+      background: white;
+
+   }
+   code span {
+      background: white;
+
+   }
+   //comment
+   span.com {
+      color: #aaa;
+
+   }
+   //keywords
+   span.kwd {
+      color: @color-secondary-2-3;
+   }
+   span.str {
+      color: @springroll-blue;
+   }
+   li.active {
+      background: fadeout(@springroll-blue, 80%);
+   }
 
 }
 /* -- Submodule List  */
@@ -953,17 +972,7 @@ kbd .cmd {
 
 }
 /* -- Source File Contents ------- */
-.prettyprint li.L0,
-.prettyprint li.L1,
-.prettyprint li.L2,
-.prettyprint li.L3,
-.prettyprint li.L5,
-.prettyprint li.L6,
-.prettyprint li.L7,
-.prettyprint li.L8 {
-   list-style: decimal;
 
-}
 /* -- API options - */
 #api-options {
    font-size: 11px;
@@ -1028,10 +1037,8 @@ kbd .cmd {
 .nav-tabs>li.active>a:focus,
 .nav-tabs>li.active>a:hover {
    color: #111;
-   background-color: @color-panel;
-   // border: 2px solid @color-line;
+   background: @color-panel;
    border-bottom-color: transparent;
-
 }
 .nav-tabs {
    // border-bottom: 2px solid @color-line;
@@ -1063,6 +1070,98 @@ kbd .cmd {
    a:focus,
    a:active {
       border-left-color: transparent;
+   }
+
+}
+
+@media (max-width: 1199px) {
+   .container {
+      width: 96%;
+   }
+}
+#sidebar {
+   .nav {
+      margin: 0;
+      padding: 0;
+   }
+   .navbar-nav {
+      padding: 0;
+      background: white;
+      width: 100%;
+   }
+   .navbar-collapse {
+      padding: 0;
+      margin: 0;
+      box-shadow: 0 2px 4px darken(@color-background, 10%);
+   }
+   .navbar-nav>li {
+      float: none;
+      &:hover {
+         background: @springroll-blue;
+      }
+
+   }
+   .btn-group {
+      width: 100%;
+      padding: 1em 0 0.5em;
+   }
+   @screen-sm-min: 768px;
+   .btn.btn-default {
+      box-shadow: 0 2px 4px darken(@color-background, 10%);
+      width: 50%;
+      border: none;
+      background: white;
+      color: @springroll-blue;
+      &:hover {
+         color: white;
+         background: @springroll-blue;
+      }
+      &:focus {
+         border: none;
+         outline: none;
+      }
+      span {
+         margin-left: 1em;
+
+      }
+      @media (min-width: @screen-sm-min) {
+         span {
+            display: none;
+         }
+
+      }
+      @media (max-width: @screen-sm-min) {
+         //switch expanded/collapse icons
+         span.expanded {
+            display: none;
+         }
+         &.active {
+            span.collapsed {
+               display: none;
+            }
+            span.expanded {
+               display: inline;
+            }
+         }
+      }
+
+   }
+   .nav>li>a {
+      color: @springroll-blue;
+      padding: 0.3em 1em;
+      margin: 0;
+      &:hover {
+         color: white;
+      }
+
+   }
+   .navbar-default {
+      background: none;
+      border: none;
+   }
+   .container-fluid {
+      padding: 0;
+      margin: 0;
    }
 }
 /* -----------------------------------
