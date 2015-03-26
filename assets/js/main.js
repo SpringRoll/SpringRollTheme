@@ -112,77 +112,78 @@
  */
 (function()
 {
-	var _toggleIds = ['toggle-classes', 'toggle-modules'];
+    var _toggleIds = ['toggle-classes', 'toggle-modules'];
 
-	var Sidebar = {};
+    var Sidebar = {};
 
-	var p = Sidebar.prototype = {};
+    var p = Sidebar.prototype = {};
 
-	p.init = function()
-	{
-		if ($(window).width() > 764)
-		{
-			var activeSidebar = '#' + (SpringRollTheme.Storage.retrieve('activeSidebar') || _toggleIds[0]);
-		    var button = $(activeSidebar);
-			button.addClass('active');
-            var target= button.data('target');
-            $(target).show();
-		}
+    p.init = function()
+    {
+        if ($(window).width() > 764)
+        {
+            var activeSidebar = '#' + (SpringRollTheme.Storage.retrieve('activeSidebar') || _toggleIds[0]);
+            var button = $(activeSidebar);
+            button.addClass('active');
+            var target = button.data('target');
+            $(target).show().addClass('active');
+        }
 
-		//store click events visibility
-		$('.sidebar-toggle').click(this.toggle);
-	};
+        //store click events visibility
+        $('.sidebar-toggle').click(this.toggle);
+    };
 
-	/**
-	 *  Respond to sidebar tab clicks. Store the most recently 
-	 *  clicked/viewed tab. 
-	 *  @param {jQuery} event
-	 */
-	p.toggle = function(event)
-	{
-		var target = $(this).data('target');
-		// Visibility is handle through css, so unlike the 
-		// scope-toggle, we only need to capture the event and 
-		// store the data for page refresh
-		localStorage.activeSidebar = this.id;
-		// Swap like tab-panes at larger sizes 
-		if ($(window).width() > 764)
-		{
-			$('#sidebar .collapse').hide().removeClass('active');
-			$(target).show().addClass('active');
-		}
-		else
-		{
-			for (var i = 0; i < _toggleIds.length; i++)
-			{
-				if (_toggleIds[i] == this.id)
-					continue;
+    /**
+     *  Respond to sidebar tab clicks. Store the most recently 
+     *  clicked/viewed tab. 
+     *  @param {jQuery} event
+     */
+    p.toggle = function(event)
+    {
+        var target = $(this).data('target');
+        // Visibility is handle through css, so unlike the 
+        // scope-toggle, we only need to capture the event and 
+        // store the data for page refresh
+        localStorage.activeSidebar = this.id;
 
-				var other = $('#' + _toggleIds[i]);
-				if (other.hasClass('active'))
-				{
-					$(other.data('target')).hide();
-					other.removeClass('active');
-					$(target).show(); //.addClass('active');
-					$(this).addClass('active');
-					return;
-				}
-			}
+        for (var i = 0; i < _toggleIds.length; i++)
+        {
+            if (_toggleIds[i] == this.id)
+                continue;
 
-			if ($(this).hasClass('active'))
-			{
-				$(this).removeClass('active');
-				$(target).slideUp(); //.removeClass('active');
-			}
-			else
-			{
-				$(target).slideDown(); //.addClass('active');
-				$(this).addClass('active');
-			}
-		}
-	};
+            // if another dropdown is already open,
+            // swap them like they are tab-panes
+            var otherToggle = $('#' + _toggleIds[i]);
+            if (otherToggle.hasClass('active'))
+            {
+				//remove old actives
+                otherToggle.removeClass('active');
+                $(otherToggle.data('target')).hide().removeClass('active');
+				//add new actives
+                $(target).show().addClass('active');
+                $(this).addClass('active');
+                return;
+            }
+        }
+		
+		// if no other was active... 
+        if ($(this).hasClass('active'))
+        {
+            // don't collapse the nav in bigger sizes
+            if ($(window).width() < 764)
+            {
+                $(this).removeClass('active');
+                $(target).slideUp().removeClass('active');
+            }
+        }
+        else
+        {
+            $(target).slideDown().addClass('active');
+            $(this).addClass('active');
+        }
+    };
 
-	SpringRollTheme.Sidebar = Sidebar.prototype;
+    SpringRollTheme.Sidebar = Sidebar.prototype;
 }());
 /**
  *
@@ -313,7 +314,7 @@
 	{
 		$("#api-filter").keyup(function(e)
 		{
-			var items = $('.tab-pane.active.list-group').children();
+			var items = $('#sidebar .collapse.active ul').children();
 			var search = this.value;
 			if (!search)
 			{

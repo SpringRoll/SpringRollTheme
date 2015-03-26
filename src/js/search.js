@@ -7,7 +7,7 @@
 	{
 		$("#api-filter").keyup(function(e)
 		{
-			var items = $('.tab-pane.active.list-group').children();
+			var items = $('#sidebar .collapse.active ul').children();
 			var search = this.value;
 			if (!search)
 			{
