@@ -1,4 +1,9 @@
 {
-	"yuiGridsUrl": "https://yui-s.yahooapis.com/3.8.0/build/cssgrids/cssgrids-min.css",
-    "yuiSeedUrl": "https://yui-s.yahooapis.com/3.10.1/build/yui/yui-min.js"
+	"bootstrapCssUrl": "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css",
+	"bootstrapJsUrl": "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js",
+	"prettifyUrl": "//google-code-prettify.googlecode.com/svn/loader/run_prettify.js",
+    "jQueryUrl": "//code.jquery.com/jquery-2.1.3.min.js",
+    "bootstrapToggleCssUrl": "//gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css",
+    "bootstrapToggleJsUrl": "//gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js",
+    "googleFontsUrl": "//fonts.googleapis.com/css?family=Titillium+Web:300,200,600"
 }
