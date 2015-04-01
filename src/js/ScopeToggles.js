@@ -15,7 +15,7 @@
      * @class ScopeToggles
      * @constructor 
      */
-    var ScopeToggles = {};
+    var ScopeToggles = function() {};
 
     var p = ScopeToggles.prototype = {};
 
@@ -28,22 +28,23 @@
         _tabContent = $('#classdocs .tab-content');
 
         //toggle visibility
-        $('.scope-toggle').change(this.toggle);
+        $('.scope-toggle').change(_onScopeToggle);
 
         if (Storage.retrieve('show_inherited') !== false)
-            this.defaultOn.call($('#toggle-inherited'));
+            _defaultOn.call($('#toggle-inherited'));
         if (Storage.retrieve('show_protected'))
-            this.defaultOn.call($('#toggle-protected'));
+            _defaultOn.call($('#toggle-protected'));
         if (Storage.retrieve('show_private'))
-            this.defaultOn.call($('#toggle-private'));
+            _defaultOn.call($('#toggle-private'));
         if (Storage.retrieve('show_deprecated'))
-            this.defaultOn.call($('#toggle-deprecated'));
+            _defaultOn.call($('#toggle-deprecated'));
     };
 
     /**
-     * @method toggle
+     * @method _onScopeToggle
+     * @private
      */
-    p.toggle = function()
+    var _onScopeToggle = function()
     {
         var id = this.id || this[0].id;
         //remove 'toggle-'
@@ -58,9 +59,10 @@
 
     /**
      * Set the checkbox to 'on' and visibilty of tab-pane
-     * @method defaultOn
+     * @method _defaultOn
+     * @private 
      */
-    p.defaultOn = function()
+    var _defaultOn = function()
     {
         this.prop('checked', true);
         var id = this.id || this[0].id;

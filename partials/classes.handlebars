@@ -1,3 +1,4 @@
+
 <h1>{{name}} Class</h1>
 <div class='box meta'>
   {{#if uses}}
@@ -64,6 +65,7 @@
 {{/is_constructor}}
 
 <div id='classdocs' class='tabview'>
+    <span id='docs-highlight'></span>
   <ul class='nav nav-tabs'>
     <li id='tab-index' class='docs-toggle'>
       <a data-toggle='tab' href='#docs-index'>Index</a>
@@ -91,10 +93,8 @@
   </ul>
 
   <div class='tab-content'>
-    <div role='tabpanel' id='docs-index' class='tab-pane'>
-      {{!--
-      <h2 class='off-left'>Item Index</h2> --}}
 
+    <div role='tabpanel' id='docs-index' class='tab-pane'>
       {{#if methods}}
         <div class='index-section tab-pane methods'>
           <h3>Methods</h3>

@@ -3,12 +3,51 @@
  */
 (function()
 {
-    var USE_SCROLL = true;
+    //const
+    var SCROLLING = {
+        ENABLED: true,
+        TIME:
+        {
+            MIN: 300,
+            MAX: 800
+        }
+    };
 
-    var Navigation = {};
-    
+    /**
+     * @constructor 
+     */
+    var Navigation = function() {};
+
+    //extend
     var p = Navigation.prototype = {};
 
+    /**
+     * @method init 
+     */
+    p.init = function()
+    {
+        //Some pages may not have all the tabs. e.g. many pages don't have a 
+        //'properties' tab, but if the local storage was on properteies, the page 
+        //will try to set that non-existant tab-pane to active, 
+        //so instead go to the index...
+        if ($(localStorage.activeDocs).length !== 0)
+            _setActiveTab('#docs-', localStorage.activeDocs);
+        else
+            _setActiveTab('#docs-', 'index');
+
+        //store click events visibility
+        $('.docs-toggle').click(
+        {
+            storageVar: 'activeDocs'
+        }, _onDocsToggle);
+
+        //switch tabs on index item click
+        $('.index-item').click(_onIndexItemClick);
+    };
+
+    /**
+     * @method gotoLine
+     */
     p.gotoLine = function()
     {
         var href = $(location).attr('href');
@@ -22,102 +61,202 @@
         }
     };
 
-    $('.index-item').click(function(e)
+    /**
+     * @method _onIndexItemClick
+     * @private 
+     * @param {jQuery Event} e
+     */
+    var _onIndexItemClick = function(e)
     {
         //deactive the current index panel
-        setActiveTab('#docs-', 'index', false);
+        _setActiveTab('#docs-', 'index', false);
+
         hash = $(this).children('a')[0].hash;
         var underscore = hash.indexOf('_');
         var tab = hash.slice(1, underscore);
 
-        // YuiDocs gives each list-item li id a singular id name (method, property, event)
-        // when we actually need a plural to match the naming of tab panel ids (methods, properties)
+        //YuiDocs gives each list-item li id a singular id name (method, property, event)
+        //when we actually need a plural to match the naming of tab panel ids (methods, properties)
         if (tab === 'property')
             tab = 'properties';
         else
             tab += 's';
         var item = hash.slice(underscore + 1);
 
-        // set which tab
-        setActiveTab('#docs-', tab);
+        //set which tab
+        _setActiveTab('#docs-', tab);
 
-        // note: we don't have to manage the deep link to the item because
-        // the href to an id takes care of itself, but here's a scrolling
-        // version if you're feeling slick 
-        if (USE_SCROLL)
+        //note: we don't have to manage the deep link to the item because
+        //the href to an id takes care of itself, but here's a scrolling
+        //version if you're feeling slick 
+        var scrollTop = $(hash).offset().top - ($('header').height() + 20);
+        var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
+        scrollLength = Math.min(Math.max(parseInt(scrollLength), SCROLLING.TIME.MIN), SCROLLING.TIME.MAX);
+        if (SCROLLING.ENABLED)
         {
             e.preventDefault();
-            var scrollTop = $(hash).offset().top - $('header').height();
-            var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
-            scrollLength = Math.min(Math.max(parseInt(scrollLength), 300), 1000);
-            $("html, body").delay(50).animate(
+            $('html, body').delay(50).animate(
             {
                 scrollTop: scrollTop
             }, scrollLength);
         }
-    });
+        var highlightTop = $(hash).offset().top - ($('#classdocs').offset().top);
+        _moveHighlight(highlightTop, scrollLength);
+    };
 
+    /**
+     * @method _moveHighlight
+     * @param {Number} top
+     * @param {int} time Animation length in milliseconds
+     */
+    var _moveHighlight = function(top, time)
+    {
+        var opacity = top === 0 ? 0 : 0.25;
+        time = top === 0 ? 0 : time;
+        $('#docs-highlight').animate(
+        {
+            top: top,
+            opacity: opacity
+        }, time);
+    };
+
+    /**
+     * Respond to tab pane nav clicks. Store the most recently 
+     * clicked/viewed tab. 
+     * @method toggle
+     * @private
+     * @param {jQuery} event
+     */
+    var _onDocsToggle = function(event)
+    {
+        _moveHighlight(0, 0);
+        //Visibility is handle through css, so unlike the 
+        //scope-toggle, we only need to capture the event and 
+        //store the data for page refresh
+        var id = this.id || this[0].id;
+        //remove 'toggle-'
+        var view = id.slice(id.lastIndexOf('-') + 1);
+        localStorage[event.data.storageVar] = view;
+    };
+
+    /**
+     * Init tab-pane and nav-li elements on page to have a .active 
+     * based on localStorage, or to default view if localStorage is null.
+     * @method _setActiveTab
+     * @private
+     * @param {String} view Which sidebar view to init
+     */
+    var _setActiveTab = function(paneId, view, activate)
+    {
+        if (activate === false)
+        {
+            $('#tab-' + view).removeClass('active');
+            $(paneId + view).removeClass('active');
+        }
+        else
+        {
+            $('#tab-' + view).addClass('active');
+            $(paneId + view).addClass('active');
+        }
+    };
+
+    //namespace
     SpringRollTheme.Navigation = Navigation.prototype;
 }());
 /**
- *
+ * Handles the visibility of scope items in the docs. Such as
+ * 'private', 'inherited', etc.
+ * @module ScopeToggle
  */
 (function()
 {
+    //imports
     var Storage = null;
-    var _tabContent = $('#classdocs .tab-content');
 
-    var ScopeToggles = {};
-    
+    //local static
+    var _tabContent = null;
+
+    /**
+     * @class ScopeToggles
+     * @constructor 
+     */
+    var ScopeToggles = function() {};
+
     var p = ScopeToggles.prototype = {};
 
+    /**
+     * @method init
+     */
     p.init = function()
     {
         Storage = SpringRollTheme.Storage;
+        _tabContent = $('#classdocs .tab-content');
+
         //toggle visibility
-        $('.scope-toggle').change(this.toggle);
+        $('.scope-toggle').change(_onScopeToggle);
 
         if (Storage.retrieve('show_inherited') !== false)
-            this.defaultOn.call($('#toggle-inherited'));
+            _defaultOn.call($('#toggle-inherited'));
         if (Storage.retrieve('show_protected'))
-            this.defaultOn.call($('#toggle-protected'));
+            _defaultOn.call($('#toggle-protected'));
         if (Storage.retrieve('show_private'))
-            this.defaultOn.call($('#toggle-private'));
+            _defaultOn.call($('#toggle-private'));
         if (Storage.retrieve('show_deprecated'))
-            this.defaultOn.call($('#toggle-deprecated'));
+            _defaultOn.call($('#toggle-deprecated'));
     };
 
-    p.toggle = function()
+    /**
+     * @method _onScopeToggle
+     * @private
+     */
+    var _onScopeToggle = function()
     {
         var id = this.id || this[0].id;
-        var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
+        //remove 'toggle-'
+        var which = id.slice(id.lastIndexOf('-') + 1);
         var val = Storage.retrieve('show_' + which);
+        //store a boolean in localStorage
         localStorage['show_' + which] = !val;
+        //toggle show-[scope] on the content tab-pane,
+        //css will handle the actual visibilty from there.
         _tabContent.toggleClass('show-' + which);
     };
 
-    p.defaultOn = function()
+    /**
+     * Set the checkbox to 'on' and visibilty of tab-pane
+     * @method _defaultOn
+     * @private 
+     */
+    var _defaultOn = function()
     {
         this.prop('checked', true);
         var id = this.id || this[0].id;
-        var which = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
+        var which = id.slice(id.lastIndexOf('-') + 1); //remove 'toggle-'
         localStorage['show_' + which] = true;
         _tabContent.toggleClass('show-' + which);
     };
 
+    //namespace
     SpringRollTheme.ScopeToggles = ScopeToggles.prototype;
 }());
 /**
- *
+ * Handles collapsing and switching of panes in the sidebar
+ * @module Sidebar
  */
 (function()
 {
     var _toggleIds = ['toggle-classes', 'toggle-modules'];
 
-    var Sidebar = {};
+    /**
+     * @constructor 
+     */
+    var Sidebar = function() {};
 
     var p = Sidebar.prototype = {};
 
+    /**
+     * @method init 
+     */
     p.init = function()
     {
         if ($(window).width() > 764)
@@ -130,15 +269,17 @@
         }
 
         //store click events visibility
-        $('.sidebar-toggle').click(this.toggle);
+        $('.sidebar-toggle').click(_onApiToggle);
     };
 
     /**
-     *  Respond to sidebar tab clicks. Store the most recently 
-     *  clicked/viewed tab. 
-     *  @param {jQuery} event
+     * Respond to sidebar tab clicks. Store the most recently 
+     * clicked/viewed tab. 
+     * @method _onApiToggle
+     * @private 
+     * @param {jQuery} event
      */
-    p.toggle = function(event)
+    var _onApiToggle = function(event)
     {
         var target = $(this).data('target');
         // Visibility is handle through css, so unlike the 
@@ -156,17 +297,17 @@
             var otherToggle = $('#' + _toggleIds[i]);
             if (otherToggle.hasClass('active'))
             {
-				//remove old actives
+                //remove old actives
                 otherToggle.removeClass('active');
                 $(otherToggle.data('target')).hide().removeClass('active');
-				//add new actives
+                //add new actives
                 $(target).show().addClass('active');
                 $(this).addClass('active');
                 return;
             }
         }
-		
-		// if no other was active... 
+
+        // if no other was active... 
         if ($(this).hasClass('active'))
         {
             // don't collapse the nav in bigger sizes
@@ -183,13 +324,17 @@
         }
     };
 
+    //namespace
     SpringRollTheme.Sidebar = Sidebar.prototype;
 }());
 /**
- *
+ * @module StickyHeader
  */
 (function()
 {
+    /**
+     * @constructor 
+     */
     var StickyHeader = function()
     {
         var header = $('header');
@@ -210,16 +355,20 @@
     SpringRollTheme.StickyHeader = StickyHeader;
 }());
 /**
- *
+ * @module Storage
  */
 (function()
 {
-    var Storage = {};
+    /**
+     * @constructor 
+     */
+    var Storage = function() {};
 
     var p = Storage.prototype = {};
 
     /**
      * Retrieval of data from localStorage that handles from-String conversions.
+     * @method retrieve 
      * @param {String} val Value to retrieve from localStorage
      */
     p.retrieve = function(val)
@@ -240,76 +389,18 @@
         return undefined;
     };
 
+    //namespace
     SpringRollTheme.Storage = Storage.prototype;
 }());
 /**
- *
+ * The search bar/class filter in the side bar
+ * @module Search
  */
 (function()
 {
-    var Tabs = {};
-
-    var p = Tabs.prototype = {};
-
-    p.init = function()
-    {
-        // Some pages may not have all the tabs. e.g. many pages don't have a 
-        // 'properties' tab, but if the local storage was on properteies, the page 
-        // will try to set that non-existant tab-pane to active, 
-        // so instead go to the index...
-        if ($(localStorage.activeDocs).length !== 0)
-            this.setActiveTab('#docs-', localStorage.activeDocs);
-        else
-            this.setActiveTab('#docs-', 'index');
-
-        //store click events visibility
-        $('.docs-toggle').click(
-        {
-            storageVar: 'activeDocs'
-        }, this.toggle);
-    };
-
-    /**
-     *  Respond to sidebar tab clicks. Store the most recently 
-     *  clicked/viewed tab. 
-     *  @param {jQuery} event
-     */
-    p.toggle = function(event)
-    {
-        // Visibility is handle through css, so unlike the 
-        // scope-toggle, we only need to capture the event and 
-        // store the data for page refresh
-        var id = this.id || this[0].id;
-        var view = id.slice(id.lastIndexOf('-') + 1); // remove 'toggle-'
-        localStorage[event.data.storageVar] = view;
-    };
-
-    /**
-     *  Init tab-pane and nav-li elements on page to have a .active 
-     *  based on localStorage, or to default view if localStorage is null.
-     *  @param {String} view Which sidebar view to init
-     */
-    p.setActiveTab = function(paneId, view, activate)
-    {
-        if (activate === false)
-        {
-            $('#tab-' + view).removeClass('active');
-            $(paneId + view).removeClass('active');
-        }
-        else
-        {
-            $('#tab-' + view).addClass('active');
-            $(paneId + view).addClass('active');
-        }
-    };
-
-    SpringRollTheme.Tabs = Tabs.prototype;
-}());
-/**
- *
- */
-(function()
-{
+	/**
+	* @constructor 
+	*/
 	var SearchBar = function()
 	{
 		$("#api-filter").keyup(function(e)
@@ -344,8 +435,8 @@ function SpringRollTheme()
 
 $(document).ready(function()
 {
+    SpringRollTheme.Navigation.init();
     SpringRollTheme.Sidebar.init();
-    SpringRollTheme.Tabs.init();
     SpringRollTheme.ScopeToggles.init();
     SpringRollTheme.SearchBar();
     SpringRollTheme.StickyHeader();

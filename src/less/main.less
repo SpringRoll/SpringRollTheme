@@ -15,6 +15,8 @@
 @sticky-height-collapsed: 38px;
 @sticky-height-expanded: 108px;
 
+@highlight-height: 3em;
+
 .constructor {
    code {
       background: lighten(@color-background, 4%);
@@ -47,8 +49,6 @@ h1 {
 }
 .tab-content {
    background: #fff;
-   margin: 0;
-   padding: 0;
    box-shadow: 0 3px 8px darken(@color-background, 10%);
 
 }
@@ -103,7 +103,7 @@ h6 {
    color: @springroll-blue !important;
    font-weight: 300;
    line-height: 1.1;
-   margin: 0 !important;
+   margin: 0 0 0.5em;
 }
 h1 {
    font-size: 184.6%;
@@ -416,10 +416,14 @@ header {
    }
 
 }
+
 #classdocs {
+   margin-top: -@highlight-height;
+   .tab-pane {
+      padding: 1em;
+   }
    .item {
-      margin: 0 !important;
-      padding: 2em;
+      margin: 1em 0 0;
       border-top: none;
    }
    .item:last-child {
@@ -975,11 +979,11 @@ pre.code.prettyprint.prettyprinted {
    }
 
 }
-
 @media (max-width: 1199px) {
    .container {
       width: 96%;
    }
+
 }
 #sidebar {
    .nav {
@@ -1065,4 +1069,17 @@ pre.code.prettyprint.prettyprinted {
       padding: 0;
       margin: 0;
    }
+
+}
+#docs-highlight {
+   height: @highlight-height;
+   //starts at 100% fadeout so jquery can fade it up 
+   //to 10% when it activates
+   background: @color-primary-1;
+   opacity: 0;
+   display: block;
+   position: relative;
+   left: -2%;
+   width: 104%;
+   float: left;
 }

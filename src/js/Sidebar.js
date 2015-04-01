@@ -9,7 +9,7 @@
     /**
      * @constructor 
      */
-    var Sidebar = {};
+    var Sidebar = function() {};
 
     var p = Sidebar.prototype = {};
 
@@ -28,15 +28,17 @@
         }
 
         //store click events visibility
-        $('.sidebar-toggle').click(this.toggle);
+        $('.sidebar-toggle').click(_onApiToggle);
     };
 
     /**
      * Respond to sidebar tab clicks. Store the most recently 
      * clicked/viewed tab. 
+     * @method _onApiToggle
+     * @private 
      * @param {jQuery} event
      */
-    p.toggle = function(event)
+    var _onApiToggle = function(event)
     {
         var target = $(this).data('target');
         // Visibility is handle through css, so unlike the 
@@ -81,5 +83,6 @@
         }
     };
 
+    //namespace
     SpringRollTheme.Sidebar = Sidebar.prototype;
 }());

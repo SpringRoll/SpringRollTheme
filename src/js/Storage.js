@@ -6,7 +6,7 @@
     /**
      * @constructor 
      */
-    var Storage = {};
+    var Storage = function() {};
 
     var p = Storage.prototype = {};
 
