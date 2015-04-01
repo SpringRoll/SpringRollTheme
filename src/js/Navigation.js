@@ -12,6 +12,7 @@
             MAX: 800
         }
     };
+    var HIGHGLIGHT_OPACITY = 0.18;
 
     /**
      * @constructor 
@@ -111,7 +112,7 @@
      */
     var _moveHighlight = function(top, time)
     {
-        var opacity = top === 0 ? 0 : 0.25;
+        var opacity = top === 0 ? 0 : HIGHGLIGHT_OPACITY;
         time = top === 0 ? 0 : time;
         $('#docs-highlight').animate(
         {
