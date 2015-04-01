@@ -100,7 +100,7 @@
                 scrollTop: scrollTop
             }, scrollLength);
         }
-        var highlightTop = $(hash).offset().top - ($('#classdocs').offset().top);
+        var highlightTop = $(hash).offset().top - ($('#classdocs').offset().top) - 10;
         _moveHighlight(highlightTop, scrollLength);
     };
 
