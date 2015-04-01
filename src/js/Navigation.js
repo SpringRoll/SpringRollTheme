@@ -5,10 +5,16 @@
 {
     var USE_SCROLL = true;
 
+    /**
+     * @constructor 
+     */
     var Navigation = {};
-    
+
     var p = Navigation.prototype = {};
 
+    /**
+     * @method 
+     */
     p.gotoLine = function()
     {
         var href = $(location).attr('href');

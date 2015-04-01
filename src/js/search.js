@@ -1,8 +1,12 @@
 /**
- *
+ * The search bar/class filter in the side bar
+ * @module Search
  */
 (function()
 {
+	/**
+	* @constructor 
+	*/
 	var SearchBar = function()
 	{
 		$("#api-filter").keyup(function(e)

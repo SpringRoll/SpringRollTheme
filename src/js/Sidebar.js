@@ -1,14 +1,21 @@
 /**
- *
+ * Handles collapsing and switching of panes in the sidebar
+ * @module Sidebar
  */
 (function()
 {
     var _toggleIds = ['toggle-classes', 'toggle-modules'];
 
+    /**
+     * @constructor 
+     */
     var Sidebar = {};
 
     var p = Sidebar.prototype = {};
 
+    /**
+     * @method init 
+     */
     p.init = function()
     {
         if ($(window).width() > 764)
@@ -25,9 +32,9 @@
     };
 
     /**
-     *  Respond to sidebar tab clicks. Store the most recently 
-     *  clicked/viewed tab. 
-     *  @param {jQuery} event
+     * Respond to sidebar tab clicks. Store the most recently 
+     * clicked/viewed tab. 
+     * @param {jQuery} event
      */
     p.toggle = function(event)
     {
@@ -47,17 +54,17 @@
             var otherToggle = $('#' + _toggleIds[i]);
             if (otherToggle.hasClass('active'))
             {
-				//remove old actives
+                //remove old actives
                 otherToggle.removeClass('active');
                 $(otherToggle.data('target')).hide().removeClass('active');
-				//add new actives
+                //add new actives
                 $(target).show().addClass('active');
                 $(this).addClass('active');
                 return;
             }
         }
-		
-		// if no other was active... 
+
+        // if no other was active... 
         if ($(this).hasClass('active'))
         {
             // don't collapse the nav in bigger sizes

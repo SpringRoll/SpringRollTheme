@@ -32,21 +32,21 @@
         <h1><a href='{{projectUrl}}'><img src='{{projectLogo}}' title='{{projectName}}'>{{projectName}}</a></h1> {{else}}
         <h1><a href='{{projectUrl}}'><img src='{{projectAssets}}/css/logo.png' title='{{projectName}}'><span class='project-name'>{{projectName}}</span></a></h1> {{/if}}
       </div>
-      {{>options}}
+{{>options}}
     </div>
   </header>
   <div class='container'>
     <div class='row'>
       <nav id='sidebar' class='col-sm-4 col-md-3'>
-        {{>sidebar}}
+{{>sidebar}}
       </nav>
       <div class='col-sm-8 col-md-9'>
-
         <div id='docs-main' class='apidocs'>
-          {{>layout_content}}
+{{>layout_content}}
         </div>
       </div>
     </div>
   </div>
 </body>
+
 </html>

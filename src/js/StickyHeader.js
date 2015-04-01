@@ -1,8 +1,11 @@
 /**
- *
+ * @module StickyHeader
  */
 (function()
 {
+    /**
+     * @constructor 
+     */
     var StickyHeader = function()
     {
         var header = $('header');
