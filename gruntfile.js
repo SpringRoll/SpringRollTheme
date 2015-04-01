@@ -7,12 +7,22 @@ module.exports = function(grunt)
         {
             all: ['src/js/**/*.js']
         },
+        uglify:
+        {
+            deploy:
+            {
+                files:
+                {
+                    'assets/js/main.js': 'assets/js/main.js'
+                }
+            }
+        },
         concat:
         {
             less:
             {
-                src: ['src/less/**/*.less',],
-                dest: 'temp/less/concat.less',
+                src: ['src/less/**/*.less', ],
+                dest: 'temp/concat.less',
             },
             js:
             {
@@ -33,9 +43,13 @@ module.exports = function(grunt)
                 files:
                 {
                     // destination file and source file
-                    'assets/css/main.css': ['temp/less/concat.less']
+                    'assets/css/main.css': ['temp/concat.less']
                 }
             }
+        },
+        clean:
+        {
+            temp: ["temp/"]
         },
         watch:
         {
@@ -53,12 +67,12 @@ module.exports = function(grunt)
             less:
             {
                 // which files to watch
-                files: ['temp/less/concat.less'],
+                files: ['temp/concat.less'],
                 tasks: ['less'],
             },
         }
     });
 
-    grunt.registerTask('default', ['jshint', 'concat', 'less']);
+    grunt.registerTask('default', ['jshint', 'concat', 'clean:temp', 'uglify', 'less']);
     grunt.registerTask('dev', ['watch']);
 };
