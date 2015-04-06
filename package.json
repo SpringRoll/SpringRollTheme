@@ -11,19 +11,13 @@
     "url": "https://github.com/SpringRoll/SpringRollTheme.git"
   },
   "author": "CloudKid LLC.",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/SpringRoll/SpringRollTheme/issues"
   },
   "homepage": "https://github.com/SpringRoll/SpringRollTheme",
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-less": "^1.0.0",
-    "grunt-contrib-uglify": "^0.8.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "jit-grunt": "^0.9.1"
+    "project-grunt": "^0.6.2"
   }
 }

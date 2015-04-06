@@ -1,0 +1,12 @@
+{
+	"name": "SpringRollTheme",
+	"version": "1.0.0",
+	"private": true,
+	"dependencies": {
+		"jquery": "*",
+		"bootstrap": "*",
+		"bootstrap-toggle": "*",
+		"cloudkid-namespace": "*",
+		"google-code-prettify": "*"
+	}
+}

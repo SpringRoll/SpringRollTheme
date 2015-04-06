@@ -6,19 +6,6 @@
     {{/selleck}}
   {{/extra}}
 
-  {{#if requires}}
-    <div class="uses">
-      Requires
-      <ul class="inline commas">
-        {{#requires}}
-          <li>
-            {{#crossLinkModule .}}{{/crossLinkModule}}
-          </li>
-        {{/requires}}
-      </ul>
-    </div>
-  {{/if}}
-
   {{#if foundAt}}
     <div class="foundat">
       Defined in: <a href="{{foundAt}}">`{{{name}}}:{{{line}}}`</a>
@@ -55,40 +42,45 @@
   </div>
 {{/example}}
 
-<div>
-  <div>
-    {{#if moduleClasses}}
-      <p>This namespace provides the following classes:</p>
-
-      <ul class="module-classes">
-        {{#moduleClasses}}
-          <li class="module-class">
-            <a href="{{../projectRoot}}classes/{{name}}.html">
-                        {{displayName}}
-                    </a>
-          </li>
-        {{/moduleClasses}}
-      </ul>
-    {{/if}}
+{{#if requires}}
+  <div class="uses">
+    <p>Requires the following modules:</p>
+    <ul class="module-requires normal">
+      {{#requires}}
+        <li>
+          {{#crossLinkModule .}}{{/crossLinkModule}}
+        </li>
+      {{/requires}}
+    </ul>
   </div>
+{{/if}}
 
-  <div>
-    {{#if subModules}}
-      <p>This module is a rollup of the following modules:</p>
+{{#if moduleClasses}}
+  <p>This namespace provides the following classes:</p>
+  <ul class="module-classes normal">
+    {{#moduleClasses}}
+      <li class="module-class">
+        <a href="{{../projectRoot}}classes/{{name}}.html">
+                    {{displayName}}
+                </a>
+      </li>
+    {{/moduleClasses}}
+  </ul>
+{{/if}}
 
-      <ul class="module-submodules">
-        {{#subModules}}
-          <li class="module-submodule">
-            <a href="{{../projectRoot}}modules/{{name}}.html">
-                        {{displayName}}
-                    </a>
+{{#if subModules}}
+  <p>This module is a rollup of the following modules:</p>
+  <ul class="module-submodules normal">
+    {{#subModules}}
+      <li class="module-submodule">
+        <a href="{{../projectRoot}}modules/{{name}}.html">
+                    {{displayName}}
+                </a>
 
-            <div class="module-submodule-description">
-              {{{description}}}
-            </div>
-          </li>
-        {{/subModules}}
-      </ul>
-    {{/if}}
-  </div>
-</div>
+        <div class="module-submodule-description">
+          {{{description}}}
+        </div>
+      </li>
+    {{/subModules}}
+  </ul>
+{{/if}}

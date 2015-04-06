@@ -1,1 +1,468 @@
-function SpringRollTheme(){}!function(){var a={ENABLED:!0,TIME:{MIN:300,MAX:800}},b=.18,c=function(){},d=c.prototype={};d.init=function(){0!==$(localStorage.activeDocs).length?h("#docs-",localStorage.activeDocs):h("#docs-","index"),$(".docs-toggle").click({storageVar:"activeDocs"},g),$(".index-item").click(e)},d.gotoLine=function(){var a=$(location).attr("href");if(a.indexOf("src")>-1){var b=a.slice(a.lastIndexOf("#")+2),c=$(".file .code .linenums").children().eq(b);c.addClass("active");var d=$(c).offset().top-$("header").height();$("body").scrollTop(d)}};var e=function(b){h("#docs-","index",!1),hash=$(this).children("a")[0].hash;var c=hash.indexOf("_"),d=hash.slice(1,c);"property"===d?d="properties":d+="s";hash.slice(c+1);h("#docs-",d);var e=$(hash).offset().top-($("header").height()+20),g=Math.abs($(window).scrollTop()-e);g=Math.min(Math.max(parseInt(g),a.TIME.MIN),a.TIME.MAX),a.ENABLED&&(b.preventDefault(),$("html, body").delay(50).animate({scrollTop:e},g));var i=$(hash).offset().top-$("#classdocs").offset().top-10;f(i,g)},f=function(a,c){var d=0===a?0:b;c=0===a?0:c,$("#docs-highlight").animate({top:a,opacity:d},c)},g=function(a){f(0,0);var b=this.id||this[0].id,c=b.slice(b.lastIndexOf("-")+1);localStorage[a.data.storageVar]=c},h=function(a,b,c){c===!1?($("#tab-"+b).removeClass("active"),$(a+b).removeClass("active")):($("#tab-"+b).addClass("active"),$(a+b).addClass("active"))};SpringRollTheme.Navigation=c.prototype}(),function(){var a=null,b=null,c=function(){},d=c.prototype={};d.init=function(){a=SpringRollTheme.Storage,b=$("#classdocs .tab-content"),$(".scope-toggle").change(e),a.retrieve("show_inherited")!==!1&&f.call($("#toggle-inherited")),a.retrieve("show_protected")&&f.call($("#toggle-protected")),a.retrieve("show_private")&&f.call($("#toggle-private")),a.retrieve("show_deprecated")&&f.call($("#toggle-deprecated"))};var e=function(){var c=this.id||this[0].id,d=c.slice(c.lastIndexOf("-")+1),e=a.retrieve("show_"+d);localStorage["show_"+d]=!e,b.toggleClass("show-"+d)},f=function(){this.prop("checked",!0);var a=this.id||this[0].id,c=a.slice(a.lastIndexOf("-")+1);localStorage["show_"+c]=!0,b.toggleClass("show-"+c)};SpringRollTheme.ScopeToggles=c.prototype}(),function(){var a=["toggle-classes","toggle-modules"],b=function(){},c=b.prototype={};c.init=function(){if($(window).width()>764){var b="#"+(SpringRollTheme.Storage.retrieve("activeSidebar")||a[0]),c=$(b);c.addClass("active");var e=c.data("target");$(e).show().addClass("active")}$(".sidebar-toggle").click(d)};var d=function(){var b=$(this).data("target");localStorage.activeSidebar=this.id;for(var c=0;c<a.length;c++)if(a[c]!=this.id){var d=$("#"+a[c]);if(d.hasClass("active"))return d.removeClass("active"),$(d.data("target")).hide().removeClass("active"),$(b).show().addClass("active"),void $(this).addClass("active")}$(this).hasClass("active")?$(window).width()<764&&($(this).removeClass("active"),$(b).slideUp().removeClass("active")):($(b).slideDown().addClass("active"),$(this).addClass("active"))};SpringRollTheme.Sidebar=b.prototype}(),function(){var a=function(){var a=$("header");$(window).scroll(function(){$(this).scrollTop()>1?a.addClass("sticky"):a.removeClass("sticky")})};SpringRollTheme.StickyHeader=a}(),function(){var a=function(){},b=a.prototype={};b.retrieve=function(a){var b=localStorage[a];if(console.log("retrieve",a,b),b)switch(b){case"true":case"false":return JSON.parse(b);default:return b}return void 0},SpringRollTheme.Storage=a.prototype}(),function(){var a=function(){$("#api-filter").keyup(function(){var a=$("#sidebar .collapse.active ul").children(),b=this.value;if(b){var c=new RegExp(b,"i");a.each(function(){var a=$(this);a.removeClass("hidden");var b=a.text().replace(/ /g,"");c.test(b)||a.addClass("hidden")})}else a.removeClass("hidden")})};SpringRollTheme.SearchBar=a}(),$(document).ready(function(){SpringRollTheme.Navigation.init(),SpringRollTheme.Sidebar.init(),SpringRollTheme.ScopeToggles.init(),SpringRollTheme.SearchBar(),SpringRollTheme.StickyHeader(),setTimeout(SpringRollTheme.Navigation.gotoLine,0)});
+/**
+ * @module Storage
+ */
+(function(undefined)
+{
+	/**
+	 * @constructor 
+	 */
+	var Storage = {};
+
+	/**
+	 * Retrieval of data from localStorage that handles from-String conversions.
+	 * @method read 
+	 * @param {String} name Value to retrieve from localStorage
+	 */
+	Storage.read = function(name)
+	{
+		var value = localStorage[name];
+		//console.log('Storage.read', name, value);
+		if (value)
+		{
+			try
+			{
+				return JSON.parse(value);
+			}
+			catch(e)
+			{
+				return null;
+			}
+		}
+		return null;
+	};
+
+	/**
+	 * Save the value
+	 * @param  {String} name The property name
+	 * @param  {*} value  The value to set
+	 */
+	Storage.write = function(name, value)
+	{
+		localStorage[name] = JSON.stringify(value);
+	};
+
+	//namespace
+	namespace('springroll').Storage = Storage;
+
+}());
+/**
+ * 
+ */
+(function()
+{
+	// Include classes
+	var Storage = include('springroll.Storage');
+
+	//const
+	var SCROLLING = {
+		ENABLED: true,
+		TIME:
+		{
+			MIN: 300,
+			MAX: 800
+		}
+	};
+	var HIGHGLIGHT_OPACITY = 0.18;
+
+	/**
+	 * @constructor 
+	 */
+	var Navigation = {};
+
+	/**
+	 * @method init 
+	 */
+	Navigation.init = function()
+	{
+		//Some pages may not have all the tabs. e.g. many pages don't have a 
+		//'properties' tab, but if the local storage was on properteies, the page 
+		//will try to set that non-existant tab-pane to active, 
+		//so instead go to the index...
+		var activeDocs = Storage.read('activeDocs');
+
+		if ($(activeDocs).length !== 0)
+			_setActiveTab('#docs-', activeDocs);
+		else
+			_setActiveTab('#docs-', 'index');
+
+		//store click events visibility
+		$('.docs-toggle').click(
+		{
+			storageVar: 'activeDocs'
+		}, _onDocsToggle);
+
+		//switch tabs on index item click
+		$('.index-item').click(_onIndexItemClick);
+
+		setTimeout(Navigation.gotoLine, 0);
+	};
+
+	/**
+	 * @method gotoLine
+	 */
+	Navigation.gotoLine = function()
+	{
+		var href = $(location).attr('href');
+		if (href.indexOf('src') > -1)
+		{
+			var lineNumber = href.slice(href.lastIndexOf('#') + 2);
+			var li = $('.file .code .linenums').children().eq(lineNumber);
+			li.addClass('active');
+			var scrollTop = $(li).offset().top - $('header').height();
+			$('body').scrollTop(scrollTop);
+		}
+	};
+
+	/**
+	 * @method _onIndexItemClick
+	 * @private 
+	 * @param {jQuery Event} e
+	 */
+	var _onIndexItemClick = function(e)
+	{
+		//deactive the current index panel
+		_setActiveTab('#docs-', 'index', false);
+
+		hash = $(this).children('a')[0].hash;
+		var underscore = hash.indexOf('_');
+		var tab = hash.slice(1, underscore);
+
+		//YuiDocs gives each list-item li id a singular id name (method, property, event)
+		//when we actually need a plural to match the naming of tab panel ids (methods, properties)
+		if (tab === 'property')
+			tab = 'properties';
+		else
+			tab += 's';
+		var item = hash.slice(underscore + 1);
+
+		//set which tab
+		_setActiveTab('#docs-', tab);
+
+		//note: we don't have to manage the deep link to the item because
+		//the href to an id takes care of itself, but here's a scrolling
+		//version if you're feeling slick 
+		var scrollTop = $(hash).offset().top - ($('header').height() + 20);
+		var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
+		scrollLength = Math.min(Math.max(parseInt(scrollLength), SCROLLING.TIME.MIN), SCROLLING.TIME.MAX);
+		if (SCROLLING.ENABLED)
+		{
+			e.preventDefault();
+			$('html, body').delay(50).animate(
+			{
+				scrollTop: scrollTop
+			}, scrollLength);
+		}
+		var highlightTop = $(hash).offset().top - ($('#classdocs').offset().top) - 10;
+		_moveHighlight(highlightTop, scrollLength);
+	};
+
+	/**
+	 * @method _moveHighlight
+	 * @param {Number} top
+	 * @param {int} time Animation length in milliseconds
+	 */
+	var _moveHighlight = function(top, time)
+	{
+		var opacity = top === 0 ? 0 : HIGHGLIGHT_OPACITY;
+		time = top === 0 ? 0 : time;
+		$('#docs-highlight').animate(
+		{
+			top: top,
+			opacity: opacity
+		}, time);
+	};
+
+	/**
+	 * Respond to tab pane nav clicks. Store the most recently 
+	 * clicked/viewed tab. 
+	 * @method toggle
+	 * @private
+	 * @param {jQuery} event
+	 */
+	var _onDocsToggle = function(event)
+	{
+		_moveHighlight(0, 0);
+		//Visibility is handle through css, so unlike the 
+		//scope-toggle, we only need to capture the event and 
+		//store the data for page refresh
+		var id = this.id || this[0].id;
+		//remove 'toggle-'
+		var view = id.slice(id.lastIndexOf('-') + 1);
+		Storage.write(event.data.storageVar, view);
+	};
+
+	/**
+	 * Init tab-pane and nav-li elements on page to have a .active 
+	 * based on localStorage, or to default view if localStorage is null.
+	 * @method _setActiveTab
+	 * @private
+	 * @param {String} view Which sidebar view to init
+	 */
+	var _setActiveTab = function(paneId, view, activate)
+	{
+		if (activate === false)
+		{
+			$('#tab-' + view).removeClass('active');
+			$(paneId + view).removeClass('active');
+		}
+		else
+		{
+			$('#tab-' + view).addClass('active');
+			$(paneId + view).addClass('active');
+		}
+	};
+
+	//namespace
+	namespace('springroll').Navigation = Navigation;
+
+}());
+/**
+ * Handles the visibility of scope items in the docs. Such as
+ * 'private', 'inherited', etc.
+ * @module ScopeToggle
+ */
+(function()
+{
+	//imports
+	var Storage = include('springroll.Storage');
+
+	//local static
+	var _tabContent = null;
+
+	/**
+	 * @class ScopeToggles
+	 * @constructor 
+	 */
+	var ScopeToggles = {};
+
+	/**
+	 * @method init
+	 */
+	ScopeToggles.init = function()
+	{
+		_tabContent = $('#classdocs .tab-content');
+
+		//toggle visibility
+		$('.scope-toggle').change(_onScopeToggle);
+
+		// set the default
+		if (Storage.read('show_inherited') === null)
+			Storage.write('show_inherited', true);
+
+		if (Storage.read('show_inherited'))
+			_defaultOn.call($('#toggle-inherited'));
+
+		if (Storage.read('show_protected'))
+			_defaultOn.call($('#toggle-protected'));
+
+		if (Storage.read('show_private'))
+			_defaultOn.call($('#toggle-private'));
+		
+		if (Storage.read('show_deprecated'))
+			_defaultOn.call($('#toggle-deprecated'));
+	};
+
+	/**
+	 * @method _onScopeToggle
+	 * @private
+	 */
+	var _onScopeToggle = function()
+	{
+		var id = this.id || this[0].id;
+
+		//remove 'toggle-'
+		var which = id.slice(id.lastIndexOf('-') + 1);
+		var value = Storage.read('show_' + which);
+
+		//store a boolean in localStorage
+		Storage.write('show_' + which, !value);
+
+		//toggle show-[scope] on the content tab-pane,
+		//css will handle the actual visibilty from there.
+		_tabContent.toggleClass('show-' + which);
+	};
+
+	/**
+	 * Set the checkbox to 'on' and visibilty of tab-pane
+	 * @method _defaultOn
+	 * @private 
+	 */
+	var _defaultOn = function()
+	{
+		this.prop('checked', true);
+		var id = this.id || this[0].id;
+		var which = id.slice(id.lastIndexOf('-') + 1); //remove 'toggle-'
+		this.bootstrapToggle('on');
+		Storage.write('show_' + which, true);
+		_tabContent.toggleClass('show-' + which);
+	};
+
+	//namespace
+	namespace('springroll').ScopeToggles = ScopeToggles;
+
+}());
+/**
+ * The search bar/class filter in the side bar
+ * @module Search
+ */
+(function()
+{
+	/**
+	* @constructor 
+	*/
+	var SearchBar = function()
+	{
+		$("#api-filter").keyup(function(e)
+		{
+			var items = $('#sidebar .collapse.active ul').children();
+			var search = this.value;
+			if (!search)
+			{
+				items.removeClass('hidden');
+			}
+			else
+			{
+				var regex = new RegExp(search, 'i');
+				items.each(function()
+				{
+					var item = $(this);
+					item.removeClass('hidden');
+					var label = item.text().replace(/ /g, "");
+					if (!regex.test(label))
+					{
+						item.addClass('hidden');
+					}
+				});
+			}
+		});
+	};
+
+	namespace('springroll').SearchBar = SearchBar;
+	
+}());
+/**
+ * Handles collapsing and switching of panes in the sidebar
+ * @module Sidebar
+ */
+(function()
+{
+	var Storage = include('springroll.Storage');
+	var _toggleIds = ['toggle-classes', 'toggle-modules'];
+
+	/**
+	 * @constructor 
+	 */
+	var Sidebar = {};
+
+	/**
+	 * @method init 
+	 */
+	Sidebar.init = function()
+	{
+		if ($(window).width() > 764)
+		{
+			var activeSidebar = '#' + (Storage.read('activeSidebar') || _toggleIds[0]);
+			var button = $(activeSidebar);
+			button.addClass('active');
+			var target = button.data('target');
+			$(target).show().addClass('active');
+		}
+
+		//store click events visibility
+		$('.sidebar-toggle').click(_onApiToggle);
+	};
+
+	/**
+	 * Respond to sidebar tab clicks. Store the most recently 
+	 * clicked/viewed tab. 
+	 * @method _onApiToggle
+	 * @private 
+	 * @param {jQuery} event
+	 */
+	var _onApiToggle = function(event)
+	{
+		var target = $(this).data('target');
+		// Visibility is handle through css, so unlike the 
+		// scope-toggle, we only need to capture the event and 
+		// store the data for page refresh
+		Storage.write('activeSidebar', this.id);
+
+		for (var i = 0; i < _toggleIds.length; i++)
+		{
+			if (_toggleIds[i] == this.id)
+				continue;
+
+			// if another dropdown is already open,
+			// swap them like they are tab-panes
+			var otherToggle = $('#' + _toggleIds[i]);
+			if (otherToggle.hasClass('active'))
+			{
+				//remove old actives
+				otherToggle.removeClass('active');
+				$(otherToggle.data('target')).hide().removeClass('active');
+				//add new actives
+				$(target).show().addClass('active');
+				$(this).addClass('active');
+				return;
+			}
+		}
+
+		// if no other was active... 
+		if ($(this).hasClass('active'))
+		{
+			// don't collapse the nav in bigger sizes
+			if ($(window).width() < 764)
+			{
+				$(this).removeClass('active');
+				$(target).slideUp().removeClass('active');
+			}
+		}
+		else
+		{
+			$(target).slideDown().addClass('active');
+			$(this).addClass('active');
+		}
+	};
+
+	//namespace
+	namespace('springroll').Sidebar = Sidebar;
+
+}());
+/**
+ * @module StickyHeader
+ */
+(function()
+{
+	/**
+	 * @constructor 
+	 */
+	var StickyHeader = function()
+	{
+		var header = $('header');
+		
+		$(window).scroll(function()
+		{
+			if ($(this).scrollTop() > 1)
+			{
+				// animations are handled by css
+				header.addClass("sticky");
+			}
+			else
+			{
+				header.removeClass("sticky");
+			}
+		});
+	};
+
+	namespace('springroll').StickyHeader = StickyHeader;
+
+}());
+$(function()
+{
+	include('springroll.Navigation').init();
+	include('springroll.Sidebar').init();
+	include('springroll.ScopeToggles').init();
+	include('springroll.SearchBar')();
+	include('springroll.StickyHeader')();
+});
+//# sourceMappingURL=main.js.map
