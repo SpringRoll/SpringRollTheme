@@ -6,3 +6,5 @@ Gruntfile.js export-ignore
 bower.json export-ignore
 package.json export-ignore
 project.json export-ignore
+components export-ignore
+node_modules export-ignore
