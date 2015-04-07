@@ -24,9 +24,6 @@
 	{
 		_tabContent = $('#classdocs .tab-content');
 
-		//toggle visibility
-		$('.scope-toggle').change(_onScopeToggle);
-
 		// set the default
 		if (Storage.read('show_inherited') === null)
 			Storage.write('show_inherited', true);
@@ -42,6 +39,9 @@
 		
 		if (Storage.read('show_deprecated'))
 			_defaultOn.call($('#toggle-deprecated'));
+
+		//toggle visibility
+		$('.scope-toggle').change(_onScopeToggle);
 	};
 
 	/**
@@ -76,7 +76,7 @@
 		var which = id.slice(id.lastIndexOf('-') + 1); //remove 'toggle-'
 		this.bootstrapToggle('on');
 		Storage.write('show_' + which, true);
-		_tabContent.toggleClass('show-' + which);
+		_tabContent.addClass('show-' + which);
 	};
 
 	//namespace
