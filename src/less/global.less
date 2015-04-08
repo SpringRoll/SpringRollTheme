@@ -15,7 +15,7 @@
 @sticky-height-collapsed: 38px;
 @sticky-height-expanded: 108px;
 
-@highlight-height: 4em; 
+@highlight-height: 4em;
 
 .constructor {
    code {
@@ -416,7 +416,6 @@ header {
    }
 
 }
-
 #classdocs {
    margin-top: -@highlight-height;
    .tab-pane {
@@ -626,9 +625,9 @@ h6 {
       li {
          display: inline;
       }
+
    }
-   ul.commas 
-   {
+   ul.commas {
       li:after {
          content: ',';
       }
@@ -636,9 +635,9 @@ h6 {
          content: '';
       }
    }
+
 }
 /* Comma-separated list. */
-
 
 /* Keyboard shortcuts. */
 
@@ -1086,9 +1085,10 @@ pre.code.prettyprint.prettyprinted {
    position: relative;
    left: -2%;
    width: 104%;
+   pointer-events: none;
    float: left;
-}
 
+}
 ul.normal {
-  list-style: inherit;
+   list-style: inherit;
 }
