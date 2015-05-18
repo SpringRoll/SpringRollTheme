@@ -56,14 +56,17 @@ h1 {
 a {
    color: @color-link;
    text-decoration: none;
-   .hidden {
-      display: none;
-   }
+
    &:hover,
    &:focus {
       text-decoration: underline;
       color: @springroll-dark;
    }
+
+}
+// global .hidden
+.hidden {
+   display: none;
 
 }
 /* "Jump to Table of Contents" link is shown to assistive tools, 
@@ -1011,6 +1014,14 @@ pre.code.prettyprint.prettyprinted {
       }
 
    }
+   .btn-close {
+      position: absolute;
+      color: @color-flag-private;
+      right: 0.35em;
+      top: 0.35em;
+      z-index: 2;
+      font-size: 1.4em;
+   }
    .btn-group {
       width: 100%;
       padding: 1em 0 0.5em;
@@ -1022,9 +1033,11 @@ pre.code.prettyprint.prettyprinted {
       border: none;
       background: white;
       color: @springroll-blue;
-      &:hover {
+      &:hover,
+      &.active {
          color: white;
          background: @springroll-blue;
+
       }
       &:focus {
          border: none;

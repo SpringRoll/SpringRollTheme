@@ -2,43 +2,43 @@
 <html lang='en'>
 
 <head>
-  <title>{{projectName}} v{{projectVersion}} API Documentation : {{name}}</title>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-  <link rel='shortcut icon' type='image/png' href='{{projectAssets}}/images/favicon.ico?v={{projectVersion}}'>
-  <link href='{{googleFontsUrl}}' rel='stylesheet' type='text/css'>
-  <link rel='stylesheet' type='text/css' href='{{projectAssets}}/css/libraries.css?v={{projectVersion}}'>
-  <link rel='stylesheet' type='text/css' href='{{projectAssets}}/css/main.css?v={{projectVersion}}'>
+<title>{{projectName}} v{{projectVersion}} API Documentation : {{name}}</title>
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+<link rel='shortcut icon' type='image/png' href='{{projectAssets}}/images/favicon.ico?v={{projectVersion}}'>
+<link href='{{googleFontsUrl}}' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' type='text/css' href='{{projectAssets}}/css/libraries.css?v={{projectVersion}}'>
+<link rel='stylesheet' type='text/css' href='{{projectAssets}}/css/main.css?v={{projectVersion}}'>
 </head>
 
 <body>
-  <header>
-    <div class='container'>
-      <div class='version pull-right'>
-        <em>API Documentation for: {{projectVersion}}</em>
-      </div>
-      <div class='logo'>
-        {{#if projectLogo}}
-        <h1><a href='{{projectUrl}}'><img src='{{projectLogo}}' title='{{projectName}}'>{{projectName}}</a></h1> {{else}}
-        <h1><a href='{{projectUrl}}'><img src='{{projectAssets}}/images/logo.png?v={{projectVersion}}' title='{{projectName}}'><span class='project-name'>{{projectName}}</span></a></h1> {{/if}}
-      </div>
+<header>
+<div class='container'>
+<div class='version pull-right'>
+<em>API Documentation for: {{projectVersion}}</em>
+</div>
+<div class='logo'>
+{{#if projectLogo}}
+<h1><a href='{{projectUrl}}'><img src='{{projectLogo}}' title='{{projectName}}'>{{projectName}}</a></h1> {{else}}
+<h1><a href='{{projectUrl}}'><img src='{{projectAssets}}/images/logo.png?v={{projectVersion}}' title='{{projectName}}'><span class='project-name'>{{projectName}}</span></a></h1> {{/if}}
+</div>
 {{>options}}
-    </div>
-  </header>
-  <div class='container'>
-    <div class='row'>
-      <nav id='sidebar' class='col-sm-4 col-md-3'>
+</div>
+</header>
+<div class='container'>
+<div class='row'>
+<nav id='sidebar' class='col-sm-4 col-md-3'>
 {{>sidebar}}
-      </nav>
-      <div class='col-sm-8 col-md-9'>
-        <div id='docs-main' class='apidocs'>
+</nav>
+<div class='col-sm-8 col-md-9'>
+<div id='docs-main' class='apidocs'>
 {{>layout_content}}
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src='{{projectAssets}}/js/libraries.js?v={{projectVersion}}'></script>
-  <script src='{{projectAssets}}/js/main.js?v={{projectVersion}}'></script>
+</div>
+</div>
+</div>
+</div>
+<script src='{{projectAssets}}/js/libraries.js?v={{projectVersion}}'></script>
+<script src='{{projectAssets}}/js/main.js?v={{projectVersion}}'></script>
 </body>
 </html>

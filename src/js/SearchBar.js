@@ -4,36 +4,63 @@
  */
 (function()
 {
+	var _searchbar = null;
+	var _clearButton = null;
+
 	/**
-	* @constructor 
-	*/
+	 * @constructor 
+	 */
 	var SearchBar = function()
 	{
-		$("#api-filter").keyup(function(e)
+		_searchbar = $("#api-filter");
+		_clearButton = $('#sidebar .btn-close');
+		_clearButton.addClass('hidden');
+		_searchbar.keyup(function(e)
 		{
-			var items = $('#sidebar .collapse.active ul').children();
 			var search = this.value;
-			if (!search)
-			{
-				items.removeClass('hidden');
-			}
-			else
-			{
-				var regex = new RegExp(search, 'i');
-				items.each(function()
-				{
-					var item = $(this);
-					item.removeClass('hidden');
-					var label = item.text().replace(/ /g, "");
-					if (!regex.test(label))
-					{
-						item.addClass('hidden');
-					}
-				});
-			}
+			SearchBar.apply(search);
+		});
+		_clearButton.click(function(e)
+		{
+			console.log('_clearButton click'); 
+			SearchBar.clear();
 		});
 	};
 
+	SearchBar.apply = function(search)
+	{
+		var items = $('#sidebar .collapse.active ul').children();
+		if (!search)
+		{
+			items.removeClass('hidden');
+			_clearButton.addClass('hidden');
+		}
+		else
+		{
+			_clearButton.removeClass('hidden');
+			var regex = new RegExp(search, 'i');
+			items.each(function()
+			{
+				var item = $(this);
+				item.removeClass('hidden');
+				var label = item.text().replace(/ /g, "");
+				if (!regex.test(label))
+				{
+					item.addClass('hidden');
+				}
+			});
+		}
+		//TODO 
+		/* 
+		on tab change, keep search results present and affecting the list
+		*/
+	};
+
+	SearchBar.clear = function()
+	{
+		_searchbar[0].value = '';
+		SearchBar.apply();
+	};
 	namespace('springroll').SearchBar = SearchBar;
-	
+
 }());

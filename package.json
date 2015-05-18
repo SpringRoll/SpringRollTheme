@@ -1,23 +1,27 @@
 {
-  "name": "SpringRollTheme",
-  "version": "1.0.0",
-  "description": "Custom YuiDoc theme for Springroll and related APIs",
-  "main": "path.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SpringRoll/SpringRollTheme.git"
-  },
-  "author": "CloudKid LLC.",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/SpringRoll/SpringRollTheme/issues"
-  },
-  "homepage": "https://github.com/SpringRoll/SpringRollTheme",
-  "devDependencies": {
-    "grunt": "^0.4.5",
-    "project-grunt": "^0.6.2"
-  }
+	"name": "SpringRollTheme",
+	"version": "1.0.0",
+	"description": "Custom YuiDoc theme for Springroll and related APIs",
+	"main": "path.js",
+	"scripts":
+	{
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository":
+	{
+		"type": "git",
+		"url": "https://github.com/SpringRoll/SpringRollTheme.git"
+	},
+	"author": "CloudKid LLC.",
+	"license": "MIT",
+	"bugs":
+	{
+		"url": "https://github.com/SpringRoll/SpringRollTheme/issues"
+	},
+	"homepage": "https://github.com/SpringRoll/SpringRollTheme",
+	"devDependencies":
+	{
+		"grunt": "^0.4.5",
+		"project-grunt": "^0.6.2"
+	}
 }

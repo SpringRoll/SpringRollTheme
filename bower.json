@@ -2,7 +2,8 @@
 	"name": "SpringRollTheme",
 	"version": "1.0.0",
 	"private": true,
-	"dependencies": {
+	"dependencies":
+	{
 		"jquery": "*",
 		"bootstrap": "*",
 		"bootstrap-toggle": "*",
