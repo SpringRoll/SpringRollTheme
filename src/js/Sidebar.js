@@ -45,30 +45,34 @@
 		// store the data for page refresh
 		Storage.write('activeSidebar', this.id);
 
+		// If another dropdown is already open,
+		// swap them like they are tab-panes
 		for (var i = 0; i < _toggleIds.length; i++)
 		{
 			if (_toggleIds[i] == this.id)
 				continue;
-
-			// if another dropdown is already open,
-			// swap them like they are tab-panes
+		
 			var otherToggle = $('#' + _toggleIds[i]);
 			if (otherToggle.hasClass('active'))
 			{
-				//remove old actives
+				// Remove old actives
 				otherToggle.removeClass('active');
 				$(otherToggle.data('target')).hide().removeClass('active');
-				//add new actives
+				// Add new actives
 				$(target).show().addClass('active');
 				$(this).addClass('active');
+				
+				// Tell the search bar the sidebar list has changed and filter
+				// incase the search field stil has contents
+				springroll.SearchBar.apply(); 
 				return;
 			}
 		}
 
-		// if no other was active... 
+		// If no other was active... 
 		if ($(this).hasClass('active'))
 		{
-			// don't collapse the nav in bigger sizes
+			// Don't collapse the nav in bigger sizes
 			if ($(window).width() < 764)
 			{
 				$(this).removeClass('active');
@@ -82,7 +86,6 @@
 		}
 	};
 
-	//namespace
 	namespace('springroll').Sidebar = Sidebar;
-
+	
 }());

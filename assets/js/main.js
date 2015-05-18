@@ -307,6 +307,7 @@
  */
 (function()
 {
+	var _currSearch = null;
 	var _searchbar = null;
 	var _clearButton = null;
 
@@ -320,20 +321,21 @@
 		_clearButton.addClass('hidden');
 		_searchbar.keyup(function(e)
 		{
-			var search = this.value;
-			SearchBar.apply(search);
+			_currSearch = this.value;
+			SearchBar.apply(_currSearch);
 		});
 		_clearButton.click(function(e)
 		{
-			console.log('_clearButton click'); 
-			SearchBar.clear();
+			console.log('_clearButton click');
+			_searchbar[0].value = _currSearch = null;
+			SearchBar.apply();
 		});
 	};
 
-	SearchBar.apply = function(search)
+	SearchBar.apply = function()
 	{
 		var items = $('#sidebar .collapse.active ul').children();
-		if (!search)
+		if (!_currSearch)
 		{
 			items.removeClass('hidden');
 			_clearButton.addClass('hidden');
@@ -341,7 +343,7 @@
 		else
 		{
 			_clearButton.removeClass('hidden');
-			var regex = new RegExp(search, 'i');
+			var regex = new RegExp(_currSearch, 'i');
 			items.each(function()
 			{
 				var item = $(this);
@@ -353,17 +355,8 @@
 				}
 			});
 		}
-		//TODO 
-		/* 
-		on tab change, keep search results present and affecting the list
-		*/
 	};
 
-	SearchBar.clear = function()
-	{
-		_searchbar[0].value = '';
-		SearchBar.apply();
-	};
 	namespace('springroll').SearchBar = SearchBar;
 
 }());
@@ -414,30 +407,34 @@
 		// store the data for page refresh
 		Storage.write('activeSidebar', this.id);
 
+		// If another dropdown is already open,
+		// swap them like they are tab-panes
 		for (var i = 0; i < _toggleIds.length; i++)
 		{
 			if (_toggleIds[i] == this.id)
 				continue;
-
-			// if another dropdown is already open,
-			// swap them like they are tab-panes
+		
 			var otherToggle = $('#' + _toggleIds[i]);
 			if (otherToggle.hasClass('active'))
 			{
-				//remove old actives
+				// Remove old actives
 				otherToggle.removeClass('active');
 				$(otherToggle.data('target')).hide().removeClass('active');
-				//add new actives
+				// Add new actives
 				$(target).show().addClass('active');
 				$(this).addClass('active');
+				
+				// Tell the search bar the sidebar list has changed and filter
+				// incase the search field stil has contents
+				springroll.SearchBar.apply(); 
 				return;
 			}
 		}
 
-		// if no other was active... 
+		// If no other was active... 
 		if ($(this).hasClass('active'))
 		{
-			// don't collapse the nav in bigger sizes
+			// Don't collapse the nav in bigger sizes
 			if ($(window).width() < 764)
 			{
 				$(this).removeClass('active');
@@ -451,9 +448,8 @@
 		}
 	};
 
-	//namespace
 	namespace('springroll').Sidebar = Sidebar;
-
+	
 }());
 /**
  * @module StickyHeader

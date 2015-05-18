@@ -4,6 +4,7 @@
  */
 (function()
 {
+	var _currSearch = null;
 	var _searchbar = null;
 	var _clearButton = null;
 
@@ -17,20 +18,21 @@
 		_clearButton.addClass('hidden');
 		_searchbar.keyup(function(e)
 		{
-			var search = this.value;
-			SearchBar.apply(search);
+			_currSearch = this.value;
+			SearchBar.apply(_currSearch);
 		});
 		_clearButton.click(function(e)
 		{
-			console.log('_clearButton click'); 
-			SearchBar.clear();
+			console.log('_clearButton click');
+			_searchbar[0].value = _currSearch = null;
+			SearchBar.apply();
 		});
 	};
 
-	SearchBar.apply = function(search)
+	SearchBar.apply = function()
 	{
 		var items = $('#sidebar .collapse.active ul').children();
-		if (!search)
+		if (!_currSearch)
 		{
 			items.removeClass('hidden');
 			_clearButton.addClass('hidden');
@@ -38,7 +40,7 @@
 		else
 		{
 			_clearButton.removeClass('hidden');
-			var regex = new RegExp(search, 'i');
+			var regex = new RegExp(_currSearch, 'i');
 			items.each(function()
 			{
 				var item = $(this);
@@ -50,17 +52,8 @@
 				}
 			});
 		}
-		//TODO 
-		/* 
-		on tab change, keep search results present and affecting the list
-		*/
 	};
 
-	SearchBar.clear = function()
-	{
-		_searchbar[0].value = '';
-		SearchBar.apply();
-	};
 	namespace('springroll').SearchBar = SearchBar;
 
 }());
