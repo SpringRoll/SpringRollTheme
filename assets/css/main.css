@@ -909,10 +909,13 @@ pre.code.prettyprint.prettyprinted li.active {
   background: white;
   color: #03b4e6;
 }
-#sidebar .btn.btn-default:hover,
-#sidebar .btn.btn-default.active {
+#sidebar .btn.btn-default:hover {
   color: white;
   background: #03b4e6;
+}
+#sidebar .btn.btn-default.active {
+  color: white;
+  background: #ffb300;
 }
 #sidebar .btn.btn-default:focus {
   border: none;

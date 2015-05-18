@@ -51,6 +51,7 @@ h1 {
 .navbar-nav {
    background: #fff;
    box-shadow: 0 3px 8px darken(@color-background, 10%);
+
 }
 /* -- Links ------- */
 a {
@@ -1033,11 +1034,13 @@ pre.code.prettyprint.prettyprinted {
       border: none;
       background: white;
       color: @springroll-blue;
-      &:hover,
-      &.active {
+      &:hover {
          color: white;
          background: @springroll-blue;
-
+      }
+      &.active {
+         color: white;
+         background: @color-flag-protected;
       }
       &:focus {
          border: none;

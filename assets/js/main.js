@@ -46,14 +46,18 @@
 
 }());
 /**
- * 
+ *
+ * @module Navigation
  */
 (function()
 {
 	// Include classes
 	var Storage = include('springroll.Storage');
 
-	//const
+	/**
+	 * @param SCROLLING
+	 * @constant 
+	 */
 	var SCROLLING = {
 		ENABLED: true,
 		TIME:
@@ -62,6 +66,11 @@
 			MAX: 800
 		}
 	};
+
+	/**
+	 * @param HIGHGLIGHT_OPACITY
+	 * @constant 
+	 */
 	var HIGHGLIGHT_OPACITY = 0.18;
 
 	/**
@@ -74,24 +83,25 @@
 	 */
 	Navigation.init = function()
 	{
-		//Some pages may not have all the tabs. e.g. many pages don't have a 
-		//'properties' tab, but if the local storage was on properteies, the page 
-		//will try to set that non-existant tab-pane to active, 
-		//so instead go to the index...
-		var activeDocs = Storage.read('activeDocs');
-
-		if ($(activeDocs).length !== 0)
-			_setActiveTab('#docs-', activeDocs);
+		// Check to see if user had last viewed the class in non-index tab view
+		// and return to that view if so
+		var activePanelForClass = Storage.read(_currClass());
+		if (activePanelForClass)
+		{
+			_setActiveTab('#docs-', activePanelForClass);
+		}
 		else
+		{
 			_setActiveTab('#docs-', 'index');
+		}
 
-		//store click events visibility
+		// Store click events visibility
 		$('.docs-toggle').click(
 		{
 			storageVar: 'activeDocs'
 		}, _onDocsToggle);
 
-		//switch tabs on index item click
+		// Switch tabs on index item click
 		$('.index-item').click(_onIndexItemClick);
 
 		setTimeout(Navigation.gotoLine, 0);
@@ -120,27 +130,31 @@
 	 */
 	var _onIndexItemClick = function(e)
 	{
-		//deactive the current index panel
+		// Deactive the current index panel
 		_setActiveTab('#docs-', 'index', false);
 
 		hash = $(this).children('a')[0].hash;
 		var underscore = hash.indexOf('_');
 		var tab = hash.slice(1, underscore);
 
-		//YuiDocs gives each list-item li id a singular id name (method, property, event)
-		//when we actually need a plural to match the naming of tab panel ids (methods, properties)
+		// YuiDocs gives each list-item li id a singular id name (method, property, event)
+		// when we actually need a plural to match the naming of tab panel ids (methods, properties)
 		if (tab === 'property')
+		{
 			tab = 'properties';
+		}
 		else
+		{
 			tab += 's';
+		}
 		var item = hash.slice(underscore + 1);
 
-		//set which tab
+		// Set which tab
 		_setActiveTab('#docs-', tab);
 
-		//note: we don't have to manage the deep link to the item because
-		//the href to an id takes care of itself, but here's a scrolling
-		//version if you're feeling slick 
+		// Note: we don't have to manage the deep link to the item because
+		// the href to an id takes care of itself, but here's a scrolling
+		// version if you're feeling slick 
 		var scrollTop = $(hash).offset().top - ($('header').height() + 20);
 		var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
 		scrollLength = Math.min(Math.max(parseInt(scrollLength), SCROLLING.TIME.MIN), SCROLLING.TIME.MAX);
@@ -182,13 +196,27 @@
 	var _onDocsToggle = function(event)
 	{
 		_moveHighlight(0, 0);
-		//Visibility is handle through css, so unlike the 
-		//scope-toggle, we only need to capture the event and 
-		//store the data for page refresh
+		// Visibility is handle through css, so unlike the 
+		// scope-toggle, we only need to capture the event and 
+		// store the data for page refresh
 		var id = this.id || this[0].id;
-		//remove 'toggle-'
+		// Remove 'toggle-'
 		var view = id.slice(id.lastIndexOf('-') + 1);
-		Storage.write(event.data.storageVar, view);
+		Storage.write(_currClass(), view);
+	};
+
+
+	/**
+	 * Parse the window url for current class name
+	 * @method _currClass
+	 * @private
+	 */
+	var _currClass = function()
+	{
+		var path = window.location.pathname;
+		return path.substring(
+			path.indexOf('/classes/') + '/classes/'.length,
+			path.indexOf('.html'));
 	};
 
 	/**
@@ -200,6 +228,7 @@
 	 */
 	var _setActiveTab = function(paneId, view, activate)
 	{
+		console.log('_setActiveTab pane:', paneId, '\nview:', view, '\nactivate:', activate);
 		if (activate === false)
 		{
 			$('#tab-' + view).removeClass('active');
@@ -212,7 +241,7 @@
 		}
 	};
 
-	//namespace
+	// Namespace
 	namespace('springroll').Navigation = Navigation;
 
 }());
