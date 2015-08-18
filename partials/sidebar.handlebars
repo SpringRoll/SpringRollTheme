@@ -1,25 +1,46 @@
-<div id="api-list">
-    <h2 class="off-left">APIs</h2>
-    <div id="api-tabview" class="tabview">
-        <div id="api-tabview-filter">
-            <input type="search" id="api-filter" placeholder="Type to filter APIs">
-        </div>
-		<ul class="tabs">
-            <li><a href="#api-classes">Classes</a></li>
-			<li><a href="#api-modules">Modules</a></li>
-        </ul>
-        <div id="api-tabview-panel">
-            <ul id="api-classes" class="apis classes">
-            {{#classes}}
-                <li><a href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a></li>
-            {{/classes}}
-            </ul>
-
-            <ul id="api-modules" class="apis modules">
-            {{#allModules}}
-                <li><a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a></li>
-            {{/allModules}}
-            </ul>
-        </div>
-    </div>
+<h2>APIs</h2>
+<div class='input-group'>
+  <div class='input-group-addon'>
+    <span class='glyphicon glyphicon-search'></span>
+  </div>
+  <input type='search' class='form-control' id='api-filter' placeholder='Type to filter APIs'>
+  <span class='collapsed btn-close glyphicon glyphicon-remove-sign hidden'></span>
 </div>
+<nav class='navbar navbar-default'>
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="btn-group" role="group" aria-label="...">
+    <button type="button" class="sidebar-toggle collapsed btn btn-default" id='toggle-classes' data-target='#classes-collapse'>
+      Classes
+      <span class='collapsed glyphicon glyphicon-chevron-up'></span>
+      <span class='expanded glyphicon glyphicon-chevron-down'></span>
+    </button>
+    <button type="button" class="sidebar-toggle collapsed btn btn-default" id='toggle-modules' data-target='#modules-collapse'>
+      Modules
+      <span class='collapsed glyphicon glyphicon-chevron-up'></span>
+      <span class='expanded glyphicon glyphicon-chevron-down'></span>
+    </button>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class='collapse' id='classes-collapse'>
+    <ul class='nav navbar-nav'>
+      {{#classes}}
+        <li class='{{access}}'>
+          <a href='{{../projectRoot}}classes/{{name}}.html'>{{displayName}}</a>
+        </li>
+      {{/classes}}
+    </ul>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class='collapse' id='modules-collapse'>
+    <ul class='nav navbar-nav'>
+      {{#allModules}}
+        <li class=''>
+          <a href='{{../projectRoot}}modules/{{name}}.html'>{{displayName}}</a>
+        </li>
+      {{/allModules}}
+    </ul>
+  </div>
+  <!-- /.container-fluid -->
+</nav>

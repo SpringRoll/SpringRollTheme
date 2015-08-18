@@ -1,0 +1,38 @@
+/* -----------------------------------
+    BootstrapToggle button override 
+ ----------------------------------- */
+
+// mixin to affect colors when checkbox is active
+.toggle-button-override(@color) {
+   .btn-primary {
+      background-color: @color;
+      border-color: darken(@color-background, 30%);
+      &.active,
+      &.focus,
+      &:active,
+      &:focus,
+      &:hover,
+      .open>.dropdown-toggle.btn-primary {
+         background-color: @color;
+         border-color: darken(@color-background, 30%);
+      }
+   }
+
+}
+#toggle-private + .toggle-group {
+   .toggle-button-override(@color-flag-private);
+}
+#toggle-protected + .toggle-group {
+   .toggle-button-override(@color-flag-protected);
+}
+#toggle-deprecated + .toggle-group {
+   .toggle-button-override(@color-flag-deprecated);
+
+}
+// top level mixin affects all left over checkboxes
+.toggle-button-override(@color-flag-default);
+
+.toggle-group .btn-default.active {
+   color: #999 !important;
+   background-color: #444 !important;
+}

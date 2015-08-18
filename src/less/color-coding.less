@@ -1,0 +1,54 @@
+/* -----------------------------------
+   Color code the docs, 
+   and hide the now-redudant flags
+ ----------------------------------- */
+
+& when (@colorIndex = true) {
+   #docs-index {
+      .private a {
+         color: @color-flag-private;
+      }
+      .protected a {
+         color: @color-flag-protected;
+      }
+      .deprecated a {
+         text-decoration: line-through;
+      }
+   }
+
+}
+& when (@colorDocs = true) {
+   #classdocs {
+      h3 code {
+         color: @color-flag-default;
+      }
+      .inherited h3 code {
+         font-weight: normal;
+      }
+      .private h3 code {
+         color: @color-flag-private;
+      }
+      .protected h3 code {
+         color: @color-flag-protected;
+      }
+      .deprecated h3 code {
+         text-decoration: line-through;
+      }
+   }
+
+}
+& when (@showFlags = false) {
+   #classdocs {
+      .apidocs {
+         .flag.private {
+            display: none;
+         }
+         .flag.protected {
+            display: none;
+         }
+         .flag.deprecated {
+            display: none;
+         }
+      }
+   }
+}
