@@ -7,7 +7,6 @@
 		"src/js/ScopeToggles.js",
 		"src/js/SearchBar.js",
 		"src/js/Sidebar.js",
-		"src/js/StickyHeader.js",
 		"src/js/main.js",
 		"src/less/main.less"
 	],

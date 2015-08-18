@@ -8,189 +8,142 @@
 	var Storage = include('springroll.Storage');
 
 	/**
-	 * @param SCROLLING
-	 * @constant 
-	 */
-	var SCROLLING = {
-		ENABLED: true,
-		TIME:
-		{
-			MIN: 300,
-			MAX: 800
-		}
-	};
-
-	/**
-	 * @param HIGHGLIGHT_OPACITY
-	 * @constant 
-	 */
-	var HIGHGLIGHT_OPACITY = 0.18;
-
-	/**
+	 * @class  Navigation
 	 * @constructor 
 	 */
 	var Navigation = {};
 
 	/**
+	 * The jquery body object for scrolling
+	 * @property {jQuery} $body
+	 */
+	var $body = $('html, body');
+
+	/**
+	 * The jquery header object for scrolling
+	 * @property {jQuery} $header
+	 */
+	var $header = $('header .navbar');
+
+	/**
+	 * The jquery classdocs object for position scrolling
+	 * @property {jQuery} $classdocs
+	 */
+	var $classdocs = $('#classdocs');
+
+	/**
+	 * The jquery active document element
+	 * @property {jQuery} $activeItem
+	 */
+	var $activeItem = null;
+
+	/**
+	 * The jquery active document element
+	 * @property {jQuery} $docTabs
+	 */
+	var $docTabs = $(".docs-toggle a");
+
+	/**
+	 * The jquery window element
+	 * @property {jQuery} $window
+	 */
+	var $window = $(window);
+
+	/**
+	 * If the tabs are enabled to change URL
+	 * @property {Boolean} rememberChoice
+	 */
+	var rememberChoice = true;
+
+	/**
+	 * Initialize the navigation
 	 * @method init 
+	 * @static
 	 */
 	Navigation.init = function()
 	{
-		// Check to see if user had last viewed the class in non-index tab view
-		// and return to that view if so
-		var activePanelForClass = Storage.read(_currClass());
-		if (activePanelForClass)
-		{
-			_setActiveTab('#docs-', activePanelForClass);
-		}
-		else
-		{
-			_setActiveTab('#docs-', 'index');
-		}
+		$window.on('hashchange', onHashChanged);
+		setTimeout(onHashChanged, 0);
 
-		// Store click events visibility
-		$('.docs-toggle').click(
+		// Listen for tab changes
+		$docTabs.on('show.bs.tab', function()
 		{
-			storageVar: 'activeDocs'
-		}, _onDocsToggle);
-
-		// Switch tabs on index item click
-		$('.index-item').click(_onIndexItemClick);
-
-		setTimeout(Navigation.gotoLine, 0);
+			if (rememberChoice)
+			{
+				$window.off('hashchange');
+				location.hash = "";
+				$window.on('hashchange', onHashChanged);
+				Storage.write('tabView', $(this).parent().attr('id'));
+			}
+		});
 	};
 
 	/**
-	 * @method gotoLine
+	 * Function handler when the hash changes
+	 * @method onHashChanged
+	 * @private
 	 */
-	Navigation.gotoLine = function()
+	var onHashChanged = function()
 	{
-		var href = $(location).attr('href');
-		if (href.indexOf('src') > -1)
+		var hash = location.hash;
+		var scrollTop;
+
+		// Clear any active item
+		if ($activeItem)
 		{
-			var lineNumber = href.slice(href.lastIndexOf('#') + 2);
+			$activeItem.removeClass('active');
+			$activeItem = null;
+		}
+
+		if (!hash)
+		{
+			var tabView = Storage.read('tabView') || 'tab-index';
+			var activeTab = $("#" + tabView + " a");
+
+			// No need to re-remember the tab
+			rememberChoice = false;
+			if (!activeTab.length)
+				activeTab = $('#tab-index a');
+			activeTab.tab('show');
+			rememberChoice = true;
+		}
+		else if (hash.indexOf("_") > -1)
+		{
+			var hashParts = hash.substr(1).split("_");
+
+			// Goto the correct views
+			var views = {
+				"method": "#tab-methods a",
+				"property": "#tab-properties a",
+				"event": "#tab-events a",
+				"attr": "#tab-attributes a"
+			};
+
+			// Disable the tab view remembering
+			rememberChoice = false;
+			$(views[hashParts[0]]).tab('show');
+			rememberChoice = true;
+
+			// Escape special characters
+			var activeItem = $(hash.replace(/\./g, '\\.'));
+
+			console.log(activeItem);
+			if (activeItem.length > 0)
+			{
+				$activeItem = activeItem;
+				$activeItem.addClass('active');
+				var hashTop = $activeItem.offset().top;
+				scrollTop = hashTop - $header.height();
+				$body.scrollTop(scrollTop);
+			}
+		}
+		else
+		{
+			var lineNumber = parseInt(hash.substr(2));
 			var li = $('.file .code .linenums').children().eq(lineNumber);
 			li.addClass('active');
-			var scrollTop = $(li).offset().top - $('header').height();
-			$('body').scrollTop(scrollTop);
-		}
-	};
-
-	/**
-	 * @method _onIndexItemClick
-	 * @private 
-	 * @param {jQuery Event} e
-	 */
-	var _onIndexItemClick = function(e)
-	{
-		// Deactive the current index panel
-		_setActiveTab('#docs-', 'index', false);
-
-		hash = $(this).children('a')[0].hash;
-		var underscore = hash.indexOf('_');
-		var tab = hash.slice(1, underscore);
-
-		// YuiDocs gives each list-item li id a singular id name (method, property, event)
-		// when we actually need a plural to match the naming of tab panel ids (methods, properties)
-		if (tab === 'property')
-		{
-			tab = 'properties';
-		}
-		else
-		{
-			tab += 's';
-		}
-		var item = hash.slice(underscore + 1);
-
-		// Set which tab
-		_setActiveTab('#docs-', tab);
-
-		// Note: we don't have to manage the deep link to the item because
-		// the href to an id takes care of itself, but here's a scrolling
-		// version if you're feeling slick 
-		var scrollTop = $(hash).offset().top - ($('header').height() + 20);
-		var scrollLength = Math.abs($(window).scrollTop() - scrollTop);
-		scrollLength = Math.min(Math.max(parseInt(scrollLength), SCROLLING.TIME.MIN), SCROLLING.TIME.MAX);
-		if (SCROLLING.ENABLED)
-		{
-			e.preventDefault();
-			$('html, body').delay(50).animate(
-			{
-				scrollTop: scrollTop
-			}, scrollLength);
-		}
-		var highlightTop = $(hash).offset().top - ($('#classdocs').offset().top) - 10;
-		_moveHighlight(highlightTop, scrollLength);
-	};
-
-	/**
-	 * @method _moveHighlight
-	 * @param {Number} top
-	 * @param {int} time Animation length in milliseconds
-	 */
-	var _moveHighlight = function(top, time)
-	{
-		var opacity = top === 0 ? 0 : HIGHGLIGHT_OPACITY;
-		time = top === 0 ? 0 : time;
-		$('#docs-highlight').animate(
-		{
-			top: top,
-			opacity: opacity
-		}, time);
-	};
-
-	/**
-	 * Respond to tab pane nav clicks. Store the most recently 
-	 * clicked/viewed tab. 
-	 * @method toggle
-	 * @private
-	 * @param {jQuery} event
-	 */
-	var _onDocsToggle = function(event)
-	{
-		_moveHighlight(0, 0);
-		// Visibility is handle through css, so unlike the 
-		// scope-toggle, we only need to capture the event and 
-		// store the data for page refresh
-		var id = this.id || this[0].id;
-		// Remove 'toggle-'
-		var view = id.slice(id.lastIndexOf('-') + 1);
-		Storage.write(_currClass(), view);
-	};
-
-
-	/**
-	 * Parse the window url for current class name
-	 * @method _currClass
-	 * @private
-	 */
-	var _currClass = function()
-	{
-		var path = window.location.pathname;
-		return path.substring(
-			path.indexOf('/classes/') + '/classes/'.length,
-			path.indexOf('.html'));
-	};
-
-	/**
-	 * Init tab-pane and nav-li elements on page to have a .active 
-	 * based on localStorage, or to default view if localStorage is null.
-	 * @method _setActiveTab
-	 * @private
-	 * @param {String} view Which sidebar view to init
-	 */
-	var _setActiveTab = function(paneId, view, activate)
-	{
-		console.log('_setActiveTab pane:', paneId, '\nview:', view, '\nactivate:', activate);
-		if (activate === false)
-		{
-			$('#tab-' + view).removeClass('active');
-			$(paneId + view).removeClass('active');
-		}
-		else
-		{
-			$('#tab-' + view).addClass('active');
-			$(paneId + view).addClass('active');
+			scrollTop = $(li).offset().top - $header.height();
+			$body.scrollTop(scrollTop);
 		}
 	};
 
