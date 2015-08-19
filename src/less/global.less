@@ -612,22 +612,28 @@ kbd .cmd {
 .apidocs .item.private,
 .apidocs .index-item.protected,
 .apidocs .index-item.deprecated,
-.apidocs .index-item.private,
-.apidocs .item.inherited,
-.apidocs .index-item.inherited {
-	display: none;
+.apidocs .index-item.private {
+	display: none !important;
 }
 .show-deprecated .item.deprecated,
 .show-deprecated .index-item.deprecated,
 .show-protected .item.protected,
 .show-protected .index-item.protected,
 .show-private .item.private,
-.show-private .index-item.private,
+.show-private .index-item.private {
+	display: block !important;
+}
+
+.apidocs .item.inherited,
+.apidocs .index-item.inherited{
+	display: none;
+}
 .show-inherited .item.inherited,
 .show-inherited .index-item.inherited {
 	display: block;
-
 }
+
+
 /* -- Generic Item Index styles --------------------------------------------- */
 .apidocs .index h3 {
 	/*border-bottom: 1px solid #efefef;*/
