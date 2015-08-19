@@ -85,7 +85,7 @@
 	 */
 	var onHashChanged = function()
 	{
-		var hash = location.hash;
+		var hash = location.hash.substr(1);
 		var scrollTop;
 
 		// Clear any active item
@@ -109,7 +109,7 @@
 		}
 		else if (hash.indexOf("_") > -1)
 		{
-			var hashParts = hash.substr(1).split("_");
+			var hashParts = hash.split("_");
 
 			// Goto the correct views
 			var views = {
@@ -124,26 +124,29 @@
 			$(views[hashParts[0]]).tab('show');
 			rememberChoice = true;
 
-			// Escape special characters
-			var activeItem = $(hash.replace(/\./g, '\\.'));
+			// Escape special characters and convert the hash into 
+			var activeItem = $("." + hash.replace(/\./g, '\\.'));
 
-			console.log(activeItem);
 			if (activeItem.length > 0)
 			{
 				$activeItem = activeItem;
 				$activeItem.addClass('active');
-				var hashTop = $activeItem.offset().top;
+				var hashTop = $activeItem.eq(0).offset().top;
 				scrollTop = hashTop - $header.height();
-				$body.scrollTop(scrollTop);
+				$body.stop(true).animate({
+					scrollTop: scrollTop
+				}, 500);
 			}
 		}
 		else
 		{
-			var lineNumber = parseInt(hash.substr(2));
+			var lineNumber = parseInt(hash.substr(1)); // drop the L
 			var li = $('.file .code .linenums').children().eq(lineNumber);
 			li.addClass('active');
-			scrollTop = $(li).offset().top - $header.height();
-			$body.scrollTop(scrollTop);
+			scrollTop = li.offset().top - $header.height();
+			$body.animate({
+				scrollTop: scrollTop
+			}, 500);
 		}
 	};
 
